@@ -2,14 +2,14 @@ import React from "react";
 import styles from "./Button.module.scss";
 
 interface ButtonProps {
-	buttonText: string;
 	onClick: () => void;
 	type: "button" | "submit" | "reset";
+	children: React.ReactNode;
 }
 
-const Button: React.FC<ButtonProps> = ({ buttonText, onClick, type }) => (
-	<button className={styles.button} onClick={onClick} type={type}>
-		{buttonText}
+const Button: React.FC<ButtonProps> = ({ onClick, type, children }) => (
+	<button onClick={onClick} type={type} className={styles.button}>
+		{children}
 	</button>
 );
 

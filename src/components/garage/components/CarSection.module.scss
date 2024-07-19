@@ -1,0 +1,72 @@
+.cars {
+	&-line {
+		padding: 10px;
+		justify-content: space-between;
+		display: flex;
+		align-items: center;
+
+		.edit-remove {
+			display: flex;
+			align-items: flex-end;
+			gap: 10px;
+			.edit {
+				button {
+					padding: 6px 15px;
+				}
+			}
+			.remove {
+				button {
+					border: 1px solid #0077e5;
+					background-color: transparent;
+					color: #0077e5;
+					&:hover {
+						border-color: #141a22;
+						color: white;
+						background-color: #0077e5;
+					}
+				}
+			}
+		}
+	}
+	.button-container {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+
+		button {
+			width: 35px;
+			height: 30px;
+			justify-content: center;
+			display: flex;
+			align-items: center;
+		}
+
+		.race {
+			button {
+				color: #833ab4;
+				border-color: #833ab4;
+				background-color: transparent;
+
+				&:hover {
+					color: white;
+					border-color: transparent;
+					background-color: #833ab4;
+				}
+			}
+		}
+	}
+}
+.car-container {
+	display: flex;
+	border: 1px solid;
+	padding: 10px;
+	border-image: linear-gradient(
+			90deg,
+			rgb(131, 58, 180) 0%,
+			rgba(29, 52, 253, 1) 50%,
+			rgb(69, 170, 252) 100%
+		)
+		1 0;
+
+	gap: 10px;
+}

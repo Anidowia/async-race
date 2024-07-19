@@ -1,0 +1,41 @@
+.divider {
+	display: flex;
+
+	&:before,
+	&:after {
+		content: "";
+		flex: 1;
+	}
+}
+
+.line {
+	align-items: center;
+	margin: 1em -1em;
+
+	&:before,
+	&:after {
+		height: 1px;
+		margin: 0 1em;
+	}
+}
+
+.donotcross {
+	overflow: hidden;
+	align-items: center;
+	background: linear-gradient(
+		90deg,
+		rgb(131, 58, 180) 0%,
+		rgba(29, 52, 253, 1) 50%,
+		rgb(69, 170, 252) 100%
+	);
+	color: black;
+	height: 1px;
+
+	&:before,
+	&:after {
+		background: #141a22;
+		padding: 30px 0;
+		height: 0;
+		transform: rotate(135deg);
+	}
+}
