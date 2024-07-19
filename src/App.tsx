@@ -1,11 +1,9 @@
-import "./App.css";
+import MainPage from "./pages/MainPage/MainPage";
 
 function App() {
 	return (
 		<div>
-			<p>
-				Edit <code>src/App.tsx</code> and save to reload.
-			</p>
+			<MainPage />
 		</div>
 	);
 }

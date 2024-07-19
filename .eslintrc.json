@@ -10,7 +10,16 @@
 		"no-debugger": "warn",
 		"import/prefer-default-export": "off",
 		"react/jsx-filename-extension": [1, { "extensions": [".tsx"] }],
-		"prettier/prettier": "error",
-		"react/react-in-jsx-scope": "off"
+		"react/react-in-jsx-scope": "off",
+		"react/function-component-definition": "off",
+		"prettier/prettier": [
+			"error",
+			{
+				"singleQuote": false,
+				"jsxSingleQuote": false
+			}
+		],
+		"react/prop-types": "off",
+		"react/button-has-type": "off"
 	}
 }
