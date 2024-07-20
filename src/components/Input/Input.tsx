@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./Input.module.scss";
 
 interface InputProps {
@@ -7,8 +7,12 @@ interface InputProps {
 	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Input: React.FC<InputProps> = ({ type, value, onChange }) => {
-	const [inputValue, setInputValue] = useState(value || "");
+const Input: React.FC<InputProps> = ({ type, value = "", onChange }) => {
+	const [inputValue, setInputValue] = useState(value);
+
+	useEffect(() => {
+		setInputValue(value);
+	}, [value]);
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setInputValue(event.target.value);
@@ -21,15 +25,17 @@ const Input: React.FC<InputProps> = ({ type, value, onChange }) => {
 		<div className={styles.input}>
 			<input
 				type={type}
-				placeholder="input text"
+				placeholder={type === "text" ? "input text" : ""}
 				value={inputValue}
 				onChange={handleChange}
 			/>
 		</div>
 	);
 };
+
 Input.defaultProps = {
 	value: "",
 	onChange: () => {},
 };
+
 export default Input;

@@ -18,7 +18,7 @@
 		"web-vitals": "^2.1.4"
 	},
 	"scripts": {
-		"start": "react-scripts start",
+		"start": "set PORT=4000 && react-scripts start",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
@@ -51,7 +51,9 @@
 		"eslint-config-airbnb-typescript": "^18.0.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-prettier": "^5.2.1",
+		"formik": "^2.4.6",
 		"prettier": "^3.3.3",
-		"react-router-dom": "^6.25.1"
+		"react-router-dom": "^6.25.1",
+		"yup": "^1.4.0"
 	}
 }

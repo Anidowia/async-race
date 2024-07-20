@@ -21,6 +21,6 @@
 		],
 		"react/prop-types": "off",
 		"react/button-has-type": "off",
-		"import/no-extraneous-dependencies": ["error", { "devDependencies": true }]
+		"import/no-extraneous-dependencies": "off"
 	}
 }

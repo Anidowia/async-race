@@ -2,6 +2,7 @@
 	display: flex;
 	justify-content: space-between;
 	padding: 0 10px;
+
 	h3 {
 		background: linear-gradient(
 			90deg,
@@ -9,21 +10,23 @@
 			rgba(29, 52, 253, 1) 50%,
 			rgb(69, 170, 252) 100%
 		);
-
 		-webkit-background-clip: text;
 		background-clip: text;
 		color: transparent;
 		-webkit-text-stroke: 1px transparent;
 	}
+
 	ul {
 		list-style: none;
 		display: flex;
 		align-items: center;
 		gap: 20px;
+
 		li {
 			a {
 				color: #45aafc;
 				text-decoration: none;
+
 				&:hover {
 					text-decoration: underline;
 					cursor: pointer;
@@ -31,9 +34,11 @@
 			}
 		}
 	}
+
 	.activeLink {
 		text-decoration: underline;
 	}
+
 	&-divider {
 		padding: 0 10px;
 	}
@@ -50,24 +55,32 @@ hr {
 	);
 	margin: 10px;
 }
+
 .buttons,
 .buttons-create,
 .buttons-update {
 	display: flex;
-	gap: 10px;
-}
-.buttons {
 	flex-direction: column;
 	padding: 10px;
+
+	.inlineForm {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
 	input[type="text"] {
 		padding: 8px;
+		width: 137px;
 	}
+
 	&-create,
 	.generate {
 		button {
 			border: 1px solid #0077e5;
 			background-color: transparent;
 			color: #0077e5;
+
 			&:hover {
 				border-color: #141a22;
 				color: white;
@@ -75,18 +88,13 @@ hr {
 			}
 		}
 	}
-	.generate {
-		button {
-			padding: 6px 25px;
-		}
-	}
+
 	&-race {
 		display: flex;
 		gap: 10px;
-		button {
-			padding: 6px 20px;
-		}
+		padding: 0 10px;
 	}
+
 	.race {
 		button {
 			color: #833ab4;
@@ -101,13 +109,16 @@ hr {
 		}
 	}
 }
+
 .grid {
 	display: grid;
 	grid-template-columns: 50% auto;
+
 	.page {
 		color: white;
+
 		h2 {
-			margin: 10px 0 15px;
+			margin: 20px 10px 5px;
 		}
 	}
 }

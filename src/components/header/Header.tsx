@@ -1,14 +1,26 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
 
 import Input from "../Input/Input";
 import Button from "../button/Button";
+import Divider from "../../pages/MainPage/components/Divider";
 
 import styles from "./Header.module.scss";
-import Divider from "../../pages/MainPage/components/Divider";
 
 const Header: React.FC = () => {
 	const handleButtonClick = () => {};
+
+	const initialValues = {
+		textInput: "",
+		colorInput: "#0077e5",
+	};
+
+	const validationSchema = Yup.object({
+		textInput: Yup.string().required("Required"),
+		colorInput: Yup.string().required("Required"),
+	});
 
 	return (
 		<>
@@ -40,18 +52,50 @@ const Header: React.FC = () => {
 			<div className={styles.grid}>
 				<div className={styles.buttons}>
 					<div className={styles["buttons-create"]}>
-						<Input type="text" />
-						<Button onClick={handleButtonClick} type="button">
-							CREATE
-						</Button>
-						<Input type="color" value="#0077e5" />
+						<Formik
+							initialValues={initialValues}
+							validationSchema={validationSchema}
+							onSubmit={handleButtonClick}
+						>
+							{({ handleChange, values }) => (
+								<Form className={styles.inlineForm}>
+									<Input
+										type="text"
+										value={values.textInput}
+										onChange={handleChange}
+									/>
+									<Input
+										type="color"
+										value={values.colorInput}
+										onChange={handleChange}
+									/>
+									<Button onClick={handleButtonClick} type="submit">
+										CREATE
+									</Button>
+								</Form>
+							)}
+						</Formik>
 					</div>
 					<div className={styles["buttons-update"]}>
-						<Input type="text" />
-						<Button onClick={handleButtonClick} type="button">
-							UPDATE
-						</Button>
-						<Input type="color" value="#004f98" />
+						<Formik
+							initialValues={initialValues}
+							validationSchema={validationSchema}
+							onSubmit={handleButtonClick}
+						>
+							{({ handleChange, values }) => (
+								<Form className={styles.inlineForm}>
+									<Input
+										type="text"
+										value={values.textInput}
+										onChange={handleChange}
+									/>
+									<Input type="color" value="#141a22" onChange={handleChange} />
+									<Button onClick={handleButtonClick} type="submit">
+										UPDATE
+									</Button>
+								</Form>
+							)}
+						</Formik>
 					</div>
 					<div className={styles["buttons-race"]}>
 						<div className={styles.race}>
