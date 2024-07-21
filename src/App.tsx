@@ -9,8 +9,12 @@ interface CarPosition {
 	[key: string]: number;
 }
 
+interface AnimatingCars {
+	[key: string]: boolean;
+}
+
 const App: React.FC = () => {
-	const [animatingCar, setAnimatingCar] = useState<string | null>(null);
+	const [animatingCars, setAnimatingCars] = useState<AnimatingCars>({});
 	const [pausedCars, setPausedCars] = useState<CarPosition>({
 		BMW: 0,
 		Audi: 0,
@@ -23,11 +27,15 @@ const App: React.FC = () => {
 			Audi: 0,
 			Tesla: 0,
 		});
-		setAnimatingCar(null);
+		setAnimatingCars({});
 	};
 
 	const startAllCars = () => {
-		setAnimatingCar("ALL");
+		setAnimatingCars({
+			BMW: true,
+			Audi: true,
+			Tesla: true,
+		});
 	};
 
 	const handleRaceClick = () => {
@@ -42,10 +50,10 @@ const App: React.FC = () => {
 					path="/"
 					element={
 						<MainPage
-							animatingCar={animatingCar}
+							animatingCars={animatingCars}
 							pausedCars={pausedCars}
 							setPausedCars={setPausedCars}
-							setAnimatingCar={setAnimatingCar}
+							setAnimatingCars={setAnimatingCars}
 						/>
 					}
 				/>

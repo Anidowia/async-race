@@ -8,21 +8,28 @@ interface CarPosition {
 	[key: string]: number;
 }
 
+interface AnimatingCars {
+	[key: string]: boolean;
+}
+
 interface GarageProps {
-	animatingCar: string | null;
+	animatingCars: AnimatingCars;
 	pausedCars: CarPosition;
 	setPausedCars: React.Dispatch<React.SetStateAction<CarPosition>>;
-	setAnimatingCar: React.Dispatch<React.SetStateAction<string | null>>;
+	setAnimatingCars: React.Dispatch<React.SetStateAction<AnimatingCars>>;
 }
 
 const Garage: React.FC<GarageProps> = ({
-	animatingCar,
+	animatingCars,
 	pausedCars,
 	setPausedCars,
-	setAnimatingCar,
+	setAnimatingCars,
 }) => {
 	const handleStartClick = (carName: string) => {
-		setAnimatingCar(carName);
+		setAnimatingCars((prev) => ({
+			...prev,
+			[carName]: true,
+		}));
 	};
 
 	const handleStopClick = (carName: string) => {
@@ -30,7 +37,10 @@ const Garage: React.FC<GarageProps> = ({
 			...prevPaused,
 			[carName]: 0,
 		}));
-		setAnimatingCar(null);
+		setAnimatingCars((prev) => ({
+			...prev,
+			[carName]: false,
+		}));
 	};
 
 	const handleAnimationEnd = (carName: string) => {
@@ -38,7 +48,10 @@ const Garage: React.FC<GarageProps> = ({
 			...prevPaused,
 			[carName]: 80,
 		}));
-		setAnimatingCar(null);
+		setAnimatingCars((prev) => ({
+			...prev,
+			[carName]: false,
+		}));
 	};
 
 	return (
@@ -48,9 +61,7 @@ const Garage: React.FC<GarageProps> = ({
 				color="#833ab4"
 				onStartClick={() => handleStartClick("BMW")}
 				onStopClick={() => handleStopClick("BMW")}
-				animatingCar={
-					animatingCar === "BMW" || animatingCar === "ALL" ? "BMW" : null
-				}
+				animatingCar={animatingCars.BMW}
 				pausedPosition={pausedCars.BMW}
 				onAnimationEnd={() => handleAnimationEnd("BMW")}
 			/>
@@ -59,9 +70,7 @@ const Garage: React.FC<GarageProps> = ({
 				color="#0077e5"
 				onStartClick={() => handleStartClick("Audi")}
 				onStopClick={() => handleStopClick("Audi")}
-				animatingCar={
-					animatingCar === "Audi" || animatingCar === "ALL" ? "Audi" : null
-				}
+				animatingCar={animatingCars.Audi}
 				pausedPosition={pausedCars.Audi}
 				onAnimationEnd={() => handleAnimationEnd("Audi")}
 			/>
@@ -70,9 +79,7 @@ const Garage: React.FC<GarageProps> = ({
 				color="#ff0000"
 				onStartClick={() => handleStartClick("Tesla")}
 				onStopClick={() => handleStopClick("Tesla")}
-				animatingCar={
-					animatingCar === "Tesla" || animatingCar === "ALL" ? "Tesla" : null
-				}
+				animatingCar={animatingCars.Tesla}
 				pausedPosition={pausedCars.Tesla}
 				onAnimationEnd={() => handleAnimationEnd("Tesla")}
 			/>

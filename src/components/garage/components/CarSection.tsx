@@ -10,7 +10,7 @@ interface CarSectionProps {
 	color: string;
 	onStartClick: () => void;
 	onStopClick: () => void;
-	animatingCar: string | null;
+	animatingCar: boolean;
 	pausedPosition: number;
 	onAnimationEnd: () => void;
 }
@@ -45,7 +45,7 @@ const CarSection: React.FC<CarSectionProps> = ({
 			</div>
 			<div
 				id={`car-${name}`}
-				className={animatingCar === name ? styles.animateCar : styles.pausedCar}
+				className={animatingCar ? styles.animateCar : styles.pausedCar}
 				style={{ transform: `translateX(${pausedPosition}vw)` }}
 				onAnimationEnd={onAnimationEnd}
 			>

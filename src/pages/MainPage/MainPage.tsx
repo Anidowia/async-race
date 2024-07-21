@@ -8,25 +8,28 @@ interface CarPosition {
 	[key: string]: number;
 }
 
+interface AnimatingCars {
+	[key: string]: boolean;
+}
 interface MainPageProps {
-	animatingCar: string | null;
+	animatingCars: AnimatingCars;
 	pausedCars: CarPosition;
 	setPausedCars: React.Dispatch<React.SetStateAction<CarPosition>>;
-	setAnimatingCar: React.Dispatch<React.SetStateAction<string | null>>;
+	setAnimatingCars: React.Dispatch<React.SetStateAction<AnimatingCars>>;
 }
 
 const MainPage: React.FC<MainPageProps> = ({
-	animatingCar,
+	animatingCars,
 	pausedCars,
 	setPausedCars,
-	setAnimatingCar,
+	setAnimatingCars,
 }) => (
 	<div className={styles.main}>
 		<Garage
-			animatingCar={animatingCar}
+			animatingCars={animatingCars}
 			pausedCars={pausedCars}
 			setPausedCars={setPausedCars}
-			setAnimatingCar={setAnimatingCar}
+			setAnimatingCars={setAnimatingCars}
 		/>
 	</div>
 );
