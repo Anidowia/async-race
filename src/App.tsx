@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "./store";
 
 import MainPage from "./pages/MainPage/MainPage";
 import Winners from "./pages/winners/Winners";
 import Header from "./components/header/Header";
+
+import { addCar } from "./store/slices/garageSlice";
 
 interface CarPosition {
 	[key: string]: number;
@@ -14,17 +18,15 @@ interface AnimatingCars {
 }
 
 const App: React.FC = () => {
+	const dispatch: AppDispatch = useDispatch();
+
+	const cars = useSelector((state: RootState) => state.garage.cars);
+
 	const [animatingCars, setAnimatingCars] = useState<AnimatingCars>({});
 	const [pausedCars, setPausedCars] = useState<CarPosition>({
 		BMW: 0,
 		Audi: 0,
 		Tesla: 0,
-	});
-
-	const [carList, setCarList] = useState<{ [key: string]: string }>({
-		BMW: "#833ab4",
-		Audi: "#0077e5",
-		Tesla: "#ff0000",
 	});
 
 	const stopAllCars = () => {
@@ -37,9 +39,7 @@ const App: React.FC = () => {
 	};
 
 	const startAllCars = () => {
-		setAnimatingCars(
-			Object.fromEntries(Object.keys(carList).map((car) => [car, true]))
-		);
+		setAnimatingCars(Object.fromEntries(cars.map((car) => [car.name, true])));
 	};
 
 	const handleRaceClick = () => {
@@ -47,10 +47,7 @@ const App: React.FC = () => {
 	};
 
 	const handleCreateCar = (name: string, color: string) => {
-		setCarList((prev) => ({
-			...prev,
-			[name]: color,
-		}));
+		dispatch(addCar({ name, color, id: Date.now() }));
 	};
 
 	const getRandomCarName = () => {
@@ -79,10 +76,7 @@ const App: React.FC = () => {
 	const handleGenerateCars = () => {
 		const newCarName = getRandomCarName();
 		const newCarColor = getRandomColor();
-		setCarList((prev) => ({
-			...prev,
-			[newCarName]: newCarColor,
-		}));
+		dispatch(addCar({ name: newCarName, color: newCarColor, id: Date.now() }));
 	};
 
 	return (
@@ -91,7 +85,6 @@ const App: React.FC = () => {
 				onRaceClick={handleRaceClick}
 				onResetClick={stopAllCars}
 				onCreateCar={handleCreateCar}
-				carList={carList}
 				onGenerateCars={handleGenerateCars}
 			/>
 			<Routes>
@@ -103,7 +96,6 @@ const App: React.FC = () => {
 							pausedCars={pausedCars}
 							setPausedCars={setPausedCars}
 							setAnimatingCars={setAnimatingCars}
-							carList={carList}
 						/>
 					}
 				/>

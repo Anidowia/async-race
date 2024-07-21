@@ -16,7 +16,6 @@ interface MainPageProps {
 	pausedCars: CarPosition;
 	setPausedCars: React.Dispatch<React.SetStateAction<CarPosition>>;
 	setAnimatingCars: React.Dispatch<React.SetStateAction<AnimatingCars>>;
-	carList: { [key: string]: string };
 }
 
 const MainPage: React.FC<MainPageProps> = ({
@@ -24,7 +23,6 @@ const MainPage: React.FC<MainPageProps> = ({
 	pausedCars,
 	setPausedCars,
 	setAnimatingCars,
-	carList,
 }) => (
 	<div className={styles.main}>
 		<Garage
@@ -32,7 +30,6 @@ const MainPage: React.FC<MainPageProps> = ({
 			pausedCars={pausedCars}
 			setPausedCars={setPausedCars}
 			setAnimatingCars={setAnimatingCars}
-			carList={carList}
 		/>
 	</div>
 );

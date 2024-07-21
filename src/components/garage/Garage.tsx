@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import CarSection from "./components/CarSection";
+
+import { fetchCars } from "../../store/slices/garageSlice";
+import { AppDispatch, RootState } from "../../store";
 
 import styles from "./Garage.module.scss";
 
@@ -17,7 +21,6 @@ interface GarageProps {
 	pausedCars: CarPosition;
 	setPausedCars: React.Dispatch<React.SetStateAction<CarPosition>>;
 	setAnimatingCars: React.Dispatch<React.SetStateAction<AnimatingCars>>;
-	carList: { [key: string]: string };
 }
 
 const Garage: React.FC<GarageProps> = ({
@@ -25,8 +28,16 @@ const Garage: React.FC<GarageProps> = ({
 	pausedCars,
 	setPausedCars,
 	setAnimatingCars,
-	carList,
 }) => {
+	const dispatch: AppDispatch = useDispatch();
+	const { cars, status } = useSelector((state: RootState) => state.garage);
+
+	useEffect(() => {
+		if (status === "idle") {
+			dispatch(fetchCars());
+		}
+	}, [status, dispatch]);
+
 	const handleStartClick = (carName: string) => {
 		setAnimatingCars((prev) => ({
 			...prev,
@@ -58,16 +69,16 @@ const Garage: React.FC<GarageProps> = ({
 
 	return (
 		<div className={styles.garage}>
-			{Object.entries(carList).map(([name, color]) => (
+			{cars.map((car) => (
 				<CarSection
-					key={name}
-					name={name}
-					color={color}
-					onStartClick={() => handleStartClick(name)}
-					onStopClick={() => handleStopClick(name)}
-					animatingCar={animatingCars[name] || false}
-					pausedPosition={pausedCars[name] || 0}
-					onAnimationEnd={() => handleAnimationEnd(name)}
+					key={car.id}
+					name={car.name}
+					color={car.color}
+					onStartClick={() => handleStartClick(car.name)}
+					onStopClick={() => handleStopClick(car.name)}
+					animatingCar={animatingCars[car.name] || false}
+					pausedPosition={pausedCars[car.name] || 0}
+					onAnimationEnd={() => handleAnimationEnd(car.name)}
 				/>
 			))}
 		</div>

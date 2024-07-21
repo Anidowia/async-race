@@ -2,10 +2,13 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
+import { useSelector } from "react-redux";
 
 import Input from "../Input/Input";
 import Button from "../button/Button";
 import Divider from "../../pages/MainPage/components/Divider";
+
+import { RootState } from "../../store";
 
 import styles from "./Header.module.scss";
 
@@ -13,7 +16,6 @@ interface HeaderProps {
 	onRaceClick: () => void;
 	onResetClick: () => void;
 	onCreateCar: (name: string, color: string) => void;
-	carList: { [key: string]: string };
 	onGenerateCars: () => void;
 }
 
@@ -21,9 +23,10 @@ const Header: React.FC<HeaderProps> = ({
 	onRaceClick,
 	onResetClick,
 	onCreateCar,
-	carList,
 	onGenerateCars,
 }) => {
+	const cars = useSelector((state: RootState) => state.garage.cars);
+
 	const initialValues = {
 		textInput: "",
 		colorInput: "#0077e5",
@@ -132,7 +135,7 @@ const Header: React.FC<HeaderProps> = ({
 					</div>
 				</div>
 				<div className={styles.page}>
-					<h2>Cars: {Object.keys(carList).length}</h2>
+					<h2>Cars: {cars.length}</h2>
 					<h2>Page 1/1</h2>
 				</div>
 			</div>
