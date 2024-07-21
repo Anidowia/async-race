@@ -37,11 +37,9 @@ const App: React.FC = () => {
 	};
 
 	const startAllCars = () => {
-		setAnimatingCars({
-			BMW: true,
-			Audi: true,
-			Tesla: true,
-		});
+		setAnimatingCars(
+			Object.fromEntries(Object.keys(carList).map((car) => [car, true]))
+		);
 	};
 
 	const handleRaceClick = () => {
@@ -55,6 +53,38 @@ const App: React.FC = () => {
 		}));
 	};
 
+	const getRandomCarName = () => {
+		const carNames = [
+			"Toyota",
+			"Honda",
+			"Ford",
+			"Chevrolet",
+			"Mercedes",
+			"Kia",
+			"Hyundai",
+		];
+		return carNames[Math.floor(Math.random() * carNames.length)];
+	};
+
+	const getRandomColor = () => {
+		const letters = "0123456789ABCDEF";
+		let color = "#";
+		// eslint-disable-next-line no-plusplus
+		for (let i = 0; i < 6; i++) {
+			color += letters[Math.floor(Math.random() * 16)];
+		}
+		return color;
+	};
+
+	const handleGenerateCars = () => {
+		const newCarName = getRandomCarName();
+		const newCarColor = getRandomColor();
+		setCarList((prev) => ({
+			...prev,
+			[newCarName]: newCarColor,
+		}));
+	};
+
 	return (
 		<Router>
 			<Header
@@ -62,6 +92,7 @@ const App: React.FC = () => {
 				onResetClick={stopAllCars}
 				onCreateCar={handleCreateCar}
 				carList={carList}
+				onGenerateCars={handleGenerateCars}
 			/>
 			<Routes>
 				<Route

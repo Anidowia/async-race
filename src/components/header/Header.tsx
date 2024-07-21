@@ -14,6 +14,7 @@ interface HeaderProps {
 	onResetClick: () => void;
 	onCreateCar: (name: string, color: string) => void;
 	carList: { [key: string]: string };
+	onGenerateCars: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -21,6 +22,7 @@ const Header: React.FC<HeaderProps> = ({
 	onResetClick,
 	onCreateCar,
 	carList,
+	onGenerateCars,
 }) => {
 	const initialValues = {
 		textInput: "",
@@ -125,7 +127,7 @@ const Header: React.FC<HeaderProps> = ({
 						</div>
 						<Button onClick={onResetClick}>RESET</Button>
 						<div className={styles.generate}>
-							<Button onClick={() => {}}>GENERATE CARS</Button>
+							<Button onClick={onGenerateCars}>GENERATE CARS</Button>
 						</div>
 					</div>
 				</div>
