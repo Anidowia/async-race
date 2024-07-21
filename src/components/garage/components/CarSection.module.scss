@@ -26,6 +26,13 @@
 					}
 				}
 			}
+			button {
+				width: 35px;
+				height: 30px;
+				align-items: center;
+				display: flex;
+				justify-content: center;
+			}
 		}
 	}
 	.button-container {
@@ -55,18 +62,36 @@
 			}
 		}
 	}
-}
-.car-container {
-	display: flex;
-	border: 1px solid;
-	padding: 10px;
-	border-image: linear-gradient(
-			90deg,
-			rgb(131, 58, 180) 0%,
-			rgba(29, 52, 253, 1) 50%,
-			rgb(69, 170, 252) 100%
-		)
-		1 0;
+	.car-container {
+		display: flex;
+		border: 1px solid;
+		padding: 10px;
+		border-image: linear-gradient(
+				90deg,
+				rgb(131, 58, 180) 0%,
+				rgba(29, 52, 253, 1) 50%,
+				rgb(69, 170, 252) 100%
+			)
+			1 0;
 
-	gap: 10px;
+		gap: 10px;
+	}
+
+	.animateCar {
+		animation: moveCar 2s linear forwards;
+		animation-fill-mode: forwards;
+	}
+
+	.pausedCar {
+		animation: none;
+	}
+
+	@keyframes moveCar {
+		0% {
+			transform: translateX(0);
+		}
+		100% {
+			transform: translateX(80vw);
+		}
+	}
 }

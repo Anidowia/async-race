@@ -9,9 +9,12 @@ import Divider from "../../pages/MainPage/components/Divider";
 
 import styles from "./Header.module.scss";
 
-const Header: React.FC = () => {
-	const handleButtonClick = () => {};
+interface HeaderProps {
+	onRaceClick: () => void;
+	onResetClick: () => void;
+}
 
+const Header: React.FC<HeaderProps> = ({ onRaceClick, onResetClick }) => {
 	const initialValues = {
 		textInput: "",
 		colorInput: "#0077e5",
@@ -55,7 +58,7 @@ const Header: React.FC = () => {
 						<Formik
 							initialValues={initialValues}
 							validationSchema={validationSchema}
-							onSubmit={handleButtonClick}
+							onSubmit={() => {}}
 						>
 							{({ handleChange, values }) => (
 								<Form className={styles.inlineForm}>
@@ -69,9 +72,7 @@ const Header: React.FC = () => {
 										value={values.colorInput}
 										onChange={handleChange}
 									/>
-									<Button onClick={handleButtonClick} type="submit">
-										CREATE
-									</Button>
+									<Button onClick={() => {}}>CREATE</Button>
 								</Form>
 							)}
 						</Formik>
@@ -80,7 +81,7 @@ const Header: React.FC = () => {
 						<Formik
 							initialValues={initialValues}
 							validationSchema={validationSchema}
-							onSubmit={handleButtonClick}
+							onSubmit={() => {}}
 						>
 							{({ handleChange, values }) => (
 								<Form className={styles.inlineForm}>
@@ -90,26 +91,18 @@ const Header: React.FC = () => {
 										onChange={handleChange}
 									/>
 									<Input type="color" value="#141a22" onChange={handleChange} />
-									<Button onClick={handleButtonClick} type="submit">
-										UPDATE
-									</Button>
+									<Button onClick={() => {}}>UPDATE</Button>
 								</Form>
 							)}
 						</Formik>
 					</div>
 					<div className={styles["buttons-race"]}>
 						<div className={styles.race}>
-							<Button onClick={handleButtonClick} type="button">
-								RACE
-							</Button>
+							<Button onClick={onRaceClick}>RACE</Button>
 						</div>
-						<Button onClick={handleButtonClick} type="button">
-							RESET
-						</Button>
+						<Button onClick={onResetClick}>RESET</Button>
 						<div className={styles.generate}>
-							<Button onClick={handleButtonClick} type="button">
-								GENERATE CARS
-							</Button>
+							<Button onClick={() => {}}>GENERATE CARS</Button>
 						</div>
 					</div>
 				</div>

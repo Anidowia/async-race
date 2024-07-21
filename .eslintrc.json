@@ -1,7 +1,7 @@
 {
 	"extends": ["airbnb", "airbnb-typescript", "prettier"],
 	"plugins": ["prettier"],
-	"ignorePatterns": ["react-app-env.d.ts"],
+	"ignorePatterns": ["react-app-env.d.ts", "backend/"],
 	"parserOptions": {
 		"project": "./tsconfig.json"
 	},
@@ -19,8 +19,11 @@
 				"jsxSingleQuote": false
 			}
 		],
-		"react/prop-types": "off",
-		"react/button-has-type": "off",
-		"import/no-extraneous-dependencies": "off"
+		"import/no-extraneous-dependencies": [
+			"error",
+			{
+				"devDependencies": true
+			}
+		]
 	}
 }
