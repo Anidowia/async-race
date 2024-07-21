@@ -5,9 +5,10 @@ interface InputProps {
 	type: string;
 	value?: string;
 	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+	name?: string;
 }
 
-const Input: React.FC<InputProps> = ({ type, value = "", onChange }) => {
+const Input: React.FC<InputProps> = ({ type, value = "", onChange, name }) => {
 	const [inputValue, setInputValue] = useState(value);
 
 	useEffect(() => {
@@ -25,9 +26,10 @@ const Input: React.FC<InputProps> = ({ type, value = "", onChange }) => {
 		<div className={styles.input}>
 			<input
 				type={type}
-				placeholder={type === "text" ? "input text" : ""}
+				placeholder="input text"
 				value={inputValue}
 				onChange={handleChange}
+				name={name}
 			/>
 		</div>
 	);
@@ -35,6 +37,7 @@ const Input: React.FC<InputProps> = ({ type, value = "", onChange }) => {
 
 Input.defaultProps = {
 	value: "",
+	name: "",
 	onChange: () => {},
 };
 

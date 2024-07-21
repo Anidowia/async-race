@@ -21,6 +21,12 @@ const App: React.FC = () => {
 		Tesla: 0,
 	});
 
+	const [carList, setCarList] = useState<{ [key: string]: string }>({
+		BMW: "#833ab4",
+		Audi: "#0077e5",
+		Tesla: "#ff0000",
+	});
+
 	const stopAllCars = () => {
 		setPausedCars({
 			BMW: 0,
@@ -42,9 +48,21 @@ const App: React.FC = () => {
 		startAllCars();
 	};
 
+	const handleCreateCar = (name: string, color: string) => {
+		setCarList((prev) => ({
+			...prev,
+			[name]: color,
+		}));
+	};
+
 	return (
 		<Router>
-			<Header onRaceClick={handleRaceClick} onResetClick={stopAllCars} />
+			<Header
+				onRaceClick={handleRaceClick}
+				onResetClick={stopAllCars}
+				onCreateCar={handleCreateCar}
+				carList={carList}
+			/>
 			<Routes>
 				<Route
 					path="/"
@@ -54,6 +72,7 @@ const App: React.FC = () => {
 							pausedCars={pausedCars}
 							setPausedCars={setPausedCars}
 							setAnimatingCars={setAnimatingCars}
+							carList={carList}
 						/>
 					}
 				/>

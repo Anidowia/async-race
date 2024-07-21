@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Formik, Form } from "formik";
+import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
 
 import Input from "../Input/Input";
@@ -12,9 +12,16 @@ import styles from "./Header.module.scss";
 interface HeaderProps {
 	onRaceClick: () => void;
 	onResetClick: () => void;
+	onCreateCar: (name: string, color: string) => void;
+	carList: { [key: string]: string };
 }
 
-const Header: React.FC<HeaderProps> = ({ onRaceClick, onResetClick }) => {
+const Header: React.FC<HeaderProps> = ({
+	onRaceClick,
+	onResetClick,
+	onCreateCar,
+	carList,
+}) => {
 	const initialValues = {
 		textInput: "",
 		colorInput: "#0077e5",
@@ -24,6 +31,14 @@ const Header: React.FC<HeaderProps> = ({ onRaceClick, onResetClick }) => {
 		textInput: Yup.string().required("Required"),
 		colorInput: Yup.string().required("Required"),
 	});
+
+	const handleCreateSubmit = (
+		values: typeof initialValues,
+		{ resetForm }: FormikHelpers<typeof initialValues>
+	) => {
+		onCreateCar(values.textInput, values.colorInput);
+		resetForm();
+	};
 
 	return (
 		<>
@@ -58,7 +73,7 @@ const Header: React.FC<HeaderProps> = ({ onRaceClick, onResetClick }) => {
 						<Formik
 							initialValues={initialValues}
 							validationSchema={validationSchema}
-							onSubmit={() => {}}
+							onSubmit={handleCreateSubmit}
 						>
 							{({ handleChange, values }) => (
 								<Form className={styles.inlineForm}>
@@ -66,11 +81,13 @@ const Header: React.FC<HeaderProps> = ({ onRaceClick, onResetClick }) => {
 										type="text"
 										value={values.textInput}
 										onChange={handleChange}
+										name="textInput"
 									/>
 									<Input
 										type="color"
 										value={values.colorInput}
 										onChange={handleChange}
+										name="colorInput"
 									/>
 									<Button onClick={() => {}}>CREATE</Button>
 								</Form>
@@ -89,8 +106,14 @@ const Header: React.FC<HeaderProps> = ({ onRaceClick, onResetClick }) => {
 										type="text"
 										value={values.textInput}
 										onChange={handleChange}
+										name="textInput"
 									/>
-									<Input type="color" value="#141a22" onChange={handleChange} />
+									<Input
+										type="color"
+										value="#141a22"
+										onChange={handleChange}
+										name="colorInput"
+									/>
 									<Button onClick={() => {}}>UPDATE</Button>
 								</Form>
 							)}
@@ -107,7 +130,7 @@ const Header: React.FC<HeaderProps> = ({ onRaceClick, onResetClick }) => {
 					</div>
 				</div>
 				<div className={styles.page}>
-					<h2>Cars: 1</h2>
+					<h2>Cars: {Object.keys(carList).length}</h2>
 					<h2>Page 1/1</h2>
 				</div>
 			</div>

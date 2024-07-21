@@ -17,6 +17,7 @@ interface GarageProps {
 	pausedCars: CarPosition;
 	setPausedCars: React.Dispatch<React.SetStateAction<CarPosition>>;
 	setAnimatingCars: React.Dispatch<React.SetStateAction<AnimatingCars>>;
+	carList: { [key: string]: string };
 }
 
 const Garage: React.FC<GarageProps> = ({
@@ -24,6 +25,7 @@ const Garage: React.FC<GarageProps> = ({
 	pausedCars,
 	setPausedCars,
 	setAnimatingCars,
+	carList,
 }) => {
 	const handleStartClick = (carName: string) => {
 		setAnimatingCars((prev) => ({
@@ -56,33 +58,18 @@ const Garage: React.FC<GarageProps> = ({
 
 	return (
 		<div className={styles.garage}>
-			<CarSection
-				name="BMW"
-				color="#833ab4"
-				onStartClick={() => handleStartClick("BMW")}
-				onStopClick={() => handleStopClick("BMW")}
-				animatingCar={animatingCars.BMW}
-				pausedPosition={pausedCars.BMW}
-				onAnimationEnd={() => handleAnimationEnd("BMW")}
-			/>
-			<CarSection
-				name="Audi"
-				color="#0077e5"
-				onStartClick={() => handleStartClick("Audi")}
-				onStopClick={() => handleStopClick("Audi")}
-				animatingCar={animatingCars.Audi}
-				pausedPosition={pausedCars.Audi}
-				onAnimationEnd={() => handleAnimationEnd("Audi")}
-			/>
-			<CarSection
-				name="Tesla"
-				color="#ff0000"
-				onStartClick={() => handleStartClick("Tesla")}
-				onStopClick={() => handleStopClick("Tesla")}
-				animatingCar={animatingCars.Tesla}
-				pausedPosition={pausedCars.Tesla}
-				onAnimationEnd={() => handleAnimationEnd("Tesla")}
-			/>
+			{Object.entries(carList).map(([name, color]) => (
+				<CarSection
+					key={name}
+					name={name}
+					color={color}
+					onStartClick={() => handleStartClick(name)}
+					onStopClick={() => handleStopClick(name)}
+					animatingCar={animatingCars[name] || false}
+					pausedPosition={pausedCars[name] || 0}
+					onAnimationEnd={() => handleAnimationEnd(name)}
+				/>
+			))}
 		</div>
 	);
 };
