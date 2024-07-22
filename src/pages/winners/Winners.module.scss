@@ -1,0 +1,41 @@
+.winners {
+	padding: 0 10px;
+
+	table,
+	h2 {
+		color: white;
+	}
+
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 20px;
+		text-align: center;
+
+		th,
+		td {
+			padding: 10px;
+			border-top: none;
+			position: relative;
+		}
+
+		th {
+			color: white;
+		}
+
+		td::before {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 1px;
+			background: linear-gradient(
+				90deg,
+				rgb(131, 58, 180) 0%,
+				rgba(29, 52, 253, 1) 50%,
+				rgb(69, 170, 252) 100%
+			);
+		}
+	}
+}

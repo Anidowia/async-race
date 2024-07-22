@@ -1,16 +1,15 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
 import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import { useSelector } from "react-redux";
 
 import Input from "../Input/Input";
 import Button from "../button/Button";
-import Divider from "../../pages/MainPage/components/Divider";
 
 import { RootState } from "../../store";
 
 import styles from "./Header.module.scss";
+import HeaderLinks from "./components/HeaderLinks";
 
 interface HeaderProps {
 	onRaceClick: () => void;
@@ -47,30 +46,7 @@ const Header: React.FC<HeaderProps> = ({
 
 	return (
 		<>
-			<header className={styles.header}>
-				<h3>ASYNC RACE</h3>
-				<ul className="header-menu">
-					<li>
-						<NavLink
-							to="/"
-							className={({ isActive }) => (isActive ? styles.activeLink : "")}
-						>
-							Garage
-						</NavLink>
-					</li>
-					<li>
-						<NavLink
-							to="/winners"
-							className={({ isActive }) => (isActive ? styles.activeLink : "")}
-						>
-							Winners
-						</NavLink>
-					</li>
-				</ul>
-			</header>
-			<div className={styles["header-divider"]}>
-				<Divider />
-			</div>
+			<HeaderLinks />
 
 			<div className={styles.grid}>
 				<div className={styles.buttons}>

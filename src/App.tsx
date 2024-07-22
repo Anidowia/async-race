@@ -5,7 +5,6 @@ import { AppDispatch, RootState } from "./store";
 
 import MainPage from "./pages/MainPage/MainPage";
 import Winners from "./pages/winners/Winners";
-import Header from "./components/header/Header";
 
 import { addCar } from "./store/slices/garageSlice";
 
@@ -81,12 +80,6 @@ const App: React.FC = () => {
 
 	return (
 		<Router>
-			<Header
-				onRaceClick={handleRaceClick}
-				onResetClick={stopAllCars}
-				onCreateCar={handleCreateCar}
-				onGenerateCars={handleGenerateCars}
-			/>
 			<Routes>
 				<Route
 					path="/"
@@ -96,6 +89,10 @@ const App: React.FC = () => {
 							pausedCars={pausedCars}
 							setPausedCars={setPausedCars}
 							setAnimatingCars={setAnimatingCars}
+							onRaceClick={handleRaceClick}
+							onResetClick={stopAllCars}
+							onCreateCar={handleCreateCar}
+							onGenerateCars={handleGenerateCars}
 						/>
 					}
 				/>

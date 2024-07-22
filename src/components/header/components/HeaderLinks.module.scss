@@ -1,0 +1,41 @@
+.header {
+	display: flex;
+	justify-content: space-between;
+	padding: 0 10px;
+
+	h3 {
+		background: linear-gradient(
+			90deg,
+			rgb(131, 58, 180) 0%,
+			rgba(29, 52, 253, 1) 50%,
+			rgb(69, 170, 252) 100%
+		);
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+		-webkit-text-stroke: 1px transparent;
+	}
+
+	ul {
+		list-style: none;
+		display: flex;
+		align-items: center;
+		gap: 20px;
+
+		li {
+			a {
+				color: #45aafc;
+				text-decoration: none;
+
+				&:hover {
+					text-decoration: underline;
+					cursor: pointer;
+				}
+			}
+		}
+	}
+
+	.activeLink {
+		text-decoration: underline;
+	}
+}
