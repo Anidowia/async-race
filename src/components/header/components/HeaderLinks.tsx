@@ -8,7 +8,7 @@ import styles from "./HeaderLinks.module.scss";
 const HeaderLinks: React.FC = () => (
 	<>
 		<header className={styles.header}>
-			<h3>ASYNC RACE</h3>
+			<h2>ASYNC RACE</h2>
 			<ul className="header-menu">
 				<li>
 					<NavLink

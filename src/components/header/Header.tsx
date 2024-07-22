@@ -70,7 +70,7 @@ const Header: React.FC<HeaderProps> = ({
 										onChange={handleChange}
 										name="colorInput"
 									/>
-									<Button onClick={() => {}}>CREATE</Button>
+									<Button type="submit">CREATE</Button>
 								</Form>
 							)}
 						</Formik>
@@ -95,7 +95,7 @@ const Header: React.FC<HeaderProps> = ({
 										onChange={handleChange}
 										name="colorInput"
 									/>
-									<Button onClick={() => {}}>UPDATE</Button>
+									<Button>UPDATE</Button>
 								</Form>
 							)}
 						</Formik>
