@@ -72,6 +72,7 @@ const Garage: React.FC<GarageProps> = ({
 			{cars.map((car) => (
 				<CarSection
 					key={car.id}
+					id={car.id}
 					name={car.name}
 					color={car.color}
 					onStartClick={() => handleStartClick(car.name)}

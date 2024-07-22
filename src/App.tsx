@@ -6,7 +6,7 @@ import { AppDispatch, RootState } from "./store";
 import MainPage from "./pages/MainPage/MainPage";
 import Winners from "./pages/winners/Winners";
 
-import { addCar } from "./store/slices/garageSlice";
+import { addCarToGarage } from "./store/slices/garageSlice";
 
 interface CarPosition {
 	[key: string]: number;
@@ -46,7 +46,7 @@ const App: React.FC = () => {
 	};
 
 	const handleCreateCar = (name: string, color: string) => {
-		dispatch(addCar({ name, color, id: Date.now() }));
+		dispatch(addCarToGarage({ name, color }));
 	};
 
 	const getRandomCarName = () => {
@@ -75,7 +75,7 @@ const App: React.FC = () => {
 	const handleGenerateCars = () => {
 		const newCarName = getRandomCarName();
 		const newCarColor = getRandomColor();
-		dispatch(addCar({ name: newCarName, color: newCarColor, id: Date.now() }));
+		dispatch(addCarToGarage({ name: newCarName, color: newCarColor }));
 	};
 
 	return (
