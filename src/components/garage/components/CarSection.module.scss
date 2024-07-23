@@ -14,6 +14,12 @@
 					padding: 6px 15px;
 				}
 			}
+			.edit {
+				button:active {
+					background-color: #833ab4;
+				}
+			}
+
 			.remove {
 				button {
 					border: 1px solid #0077e5;
@@ -91,7 +97,7 @@
 			transform: translateX(0);
 		}
 		100% {
-			transform: translateX(80vw);
+			transform: translateX(88vw);
 		}
 	}
 }

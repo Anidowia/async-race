@@ -10,12 +10,14 @@ interface GarageState {
 	cars: Car[];
 	status: "idle" | "loading" | "succeeded" | "failed";
 	error: string | null;
+	selectedCar: Car | null;
 }
 
 const initialState: GarageState = {
 	cars: [],
 	status: "idle",
 	error: null,
+	selectedCar: null,
 };
 
 export const fetchCars = createAsyncThunk<Car[]>(
@@ -60,10 +62,36 @@ export const deleteCar = createAsyncThunk(
 	}
 );
 
+export const updateCar = createAsyncThunk(
+	"garage/updateCar",
+	async (car: { id: number; name?: string; color?: string }) => {
+		const response = await fetch(`http://localhost:3000/garage/${car.id}`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(car),
+		});
+		if (!response.ok) {
+			throw new Error("Failed to update car");
+		}
+		return response.json();
+	}
+);
+
 const garageSlice = createSlice({
 	name: "garage",
 	initialState,
-	reducers: {},
+	reducers: {
+		setSelectedCar: (state, action: PayloadAction<Car>) => ({
+			...state,
+			selectedCar: action.payload,
+		}),
+		clearSelectedCar: (state) => ({
+			...state,
+			selectedCar: null,
+		}),
+	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(fetchCars.pending, (state) => ({
@@ -98,8 +126,20 @@ const garageSlice = createSlice({
 				...state,
 				status: "failed",
 				error: action.error.message || "Failed to delete car",
+			}))
+			.addCase(updateCar.fulfilled, (state, action: PayloadAction<Car>) => ({
+				...state,
+				cars: state.cars.map((car) =>
+					car.id === action.payload.id ? action.payload : car
+				),
+			}))
+			.addCase(updateCar.rejected, (state, action) => ({
+				...state,
+				status: "failed",
+				error: action.error.message || "Failed to update car",
 			}));
 	},
 });
 
+export const { setSelectedCar, clearSelectedCar } = garageSlice.actions;
 export default garageSlice.reducer;

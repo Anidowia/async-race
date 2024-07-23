@@ -5,7 +5,7 @@ import { AppDispatch } from "../../../store";
 import Button from "../../button/Button";
 import Car from "../../cars/Car";
 
-import { deleteCar } from "../../../store/slices/garageSlice";
+import { deleteCar, setSelectedCar } from "../../../store/slices/garageSlice";
 
 import styles from "./CarSection.module.scss";
 
@@ -35,13 +35,18 @@ const CarSection: React.FC<CarSectionProps> = ({
 	const handleDeleteClick = () => {
 		dispatch(deleteCar(id));
 	};
+
+	const handleEditClick = () => {
+		dispatch(setSelectedCar({ id, name, color }));
+	};
+
 	return (
 		<div className={styles.cars}>
 			<div className={styles["cars-line"]}>
 				<h4>{name}</h4>
 				<div className={styles["edit-remove"]}>
 					<div className={styles.edit}>
-						<Button onClick={onStartClick}>🖉</Button>
+						<Button onClick={handleEditClick}>🖉</Button>
 					</div>
 					<div className={styles.remove}>
 						<Button onClick={handleDeleteClick}>🗑</Button>
@@ -56,7 +61,7 @@ const CarSection: React.FC<CarSectionProps> = ({
 					<Button onClick={onStopClick}>{"\u23F9"}</Button>
 				</div>
 				<div
-					id={`car-${name}`}
+					id={`${name}`}
 					className={animatingCar ? styles.animateCar : styles.pausedCar}
 					style={{ transform: `translateX(${pausedPosition}vw)` }}
 					onAnimationEnd={onAnimationEnd}

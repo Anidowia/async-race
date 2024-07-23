@@ -59,7 +59,7 @@ const Garage: React.FC<GarageProps> = ({
 	const handleAnimationEnd = (carName: string) => {
 		setPausedCars((prevPaused) => ({
 			...prevPaused,
-			[carName]: 80,
+			[carName]: 88,
 		}));
 		setAnimatingCars((prev) => ({
 			...prev,

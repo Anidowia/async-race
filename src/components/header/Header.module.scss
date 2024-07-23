@@ -69,7 +69,7 @@ hr {
 
 .grid {
 	display: grid;
-	grid-template-columns: 50% auto;
+	grid-template-columns: 1fr 2fr;
 
 	.page {
 		color: white;

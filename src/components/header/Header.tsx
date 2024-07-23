@@ -1,15 +1,16 @@
 import React from "react";
 import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import Input from "../Input/Input";
 import Button from "../button/Button";
+import HeaderLinks from "./components/HeaderLinks";
 
-import { RootState } from "../../store";
+import { AppDispatch, RootState } from "../../store";
+import { clearSelectedCar, updateCar } from "../../store/slices/garageSlice";
 
 import styles from "./Header.module.scss";
-import HeaderLinks from "./components/HeaderLinks";
 
 interface HeaderProps {
 	onRaceClick: () => void;
@@ -24,11 +25,15 @@ const Header: React.FC<HeaderProps> = ({
 	onCreateCar,
 	onGenerateCars,
 }) => {
-	const cars = useSelector((state: RootState) => state.garage.cars);
+	const dispatch: AppDispatch = useDispatch();
 
+	const cars = useSelector((state: RootState) => state.garage.cars);
+	const selectedCar = useSelector(
+		(state: RootState) => state.garage.selectedCar
+	);
 	const initialValues = {
-		textInput: "",
-		colorInput: "#0077e5",
+		textInput: selectedCar?.name || "",
+		colorInput: selectedCar?.color || "#0077e5",
 	};
 
 	const validationSchema = Yup.object({
@@ -42,6 +47,22 @@ const Header: React.FC<HeaderProps> = ({
 	) => {
 		onCreateCar(values.textInput, values.colorInput);
 		resetForm();
+	};
+
+	const handleUpdateSubmit = (
+		values: typeof initialValues,
+		{ resetForm }: FormikHelpers<typeof initialValues>
+	) => {
+		if (selectedCar) {
+			const updatedCar: { id: number; name: string; color: string } = {
+				id: selectedCar.id,
+				name: values.textInput,
+				color: values.colorInput,
+			};
+			dispatch(updateCar(updatedCar));
+			resetForm();
+			dispatch(clearSelectedCar());
+		}
 	};
 
 	return (
@@ -79,7 +100,8 @@ const Header: React.FC<HeaderProps> = ({
 						<Formik
 							initialValues={initialValues}
 							validationSchema={validationSchema}
-							onSubmit={() => {}}
+							onSubmit={handleUpdateSubmit}
+							enableReinitialize
 						>
 							{({ handleChange, values }) => (
 								<Form className={styles.inlineForm}>
@@ -91,11 +113,11 @@ const Header: React.FC<HeaderProps> = ({
 									/>
 									<Input
 										type="color"
-										value="#141a22"
+										value={values.colorInput}
 										onChange={handleChange}
 										name="colorInput"
 									/>
-									<Button>UPDATE</Button>
+									<Button type="submit">UPDATE</Button>
 								</Form>
 							)}
 						</Formik>
