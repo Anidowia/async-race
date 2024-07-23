@@ -1,11 +1,11 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../store";
 
 import Button from "../../button/Button";
 import Car from "../../cars/Car";
 
 import { deleteCar, setSelectedCar } from "../../../store/slices/garageSlice";
+import { AppDispatch } from "../../../store/hooks/hooks";
 
 import styles from "./CarSection.module.scss";
 

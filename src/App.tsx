@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { AppDispatch, RootState } from "./store";
+import { RootState, AppDispatch } from "./store/hooks/hooks";
+
 import { addCarToGarage } from "./store/slices/garageSlice";
 
 import MainPage from "./pages/MainPage/MainPage";
@@ -29,11 +30,6 @@ const App: React.FC = () => {
 	});
 
 	const stopAllCars = () => {
-		setPausedCars({
-			BMW: 0,
-			Audi: 0,
-			Tesla: 0,
-		});
 		setAnimatingCars({});
 	};
 

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { fetchWinners } from "../../store/slices/winnersSlice";
-import { AppDispatch, RootState } from "../../store";
+import { AppDispatch, RootState } from "../../store/hooks/hooks";
 import { fetchCars } from "../../store/slices/garageSlice";
 
 import Car from "../../components/cars/Car";

@@ -7,7 +7,7 @@ import Input from "../Input/Input";
 import Button from "../button/Button";
 import HeaderLinks from "./components/HeaderLinks";
 
-import { AppDispatch, RootState } from "../../store";
+import { AppDispatch, RootState } from "../../store/hooks/hooks";
 import { clearSelectedCar, updateCar } from "../../store/slices/garageSlice";
 
 import styles from "./Header.module.scss";
@@ -33,7 +33,7 @@ const Header: React.FC<HeaderProps> = ({
 	);
 	const initialValues = {
 		textInput: selectedCar?.name || "",
-		colorInput: selectedCar?.color || "#0077e5",
+		colorInput: selectedCar?.color || "#833ab4",
 	};
 
 	const validationSchema = Yup.object({

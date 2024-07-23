@@ -11,6 +11,8 @@ interface GarageState {
 	status: "idle" | "loading" | "succeeded" | "failed";
 	error: string | null;
 	selectedCar: Car | null;
+	velocity: number | null;
+	distance: number | null;
 }
 
 const initialState: GarageState = {
@@ -18,6 +20,8 @@ const initialState: GarageState = {
 	status: "idle",
 	error: null,
 	selectedCar: null,
+	velocity: null,
+	distance: null,
 };
 
 export const fetchCars = createAsyncThunk<Car[]>(
