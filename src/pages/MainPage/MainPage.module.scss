@@ -2,4 +2,9 @@ body {
 	margin: 0 20px;
 	background-color: #141a22;
 	font-family: "Nunito Sans", sans-serif;
+
+	button:active,
+	button:disabled {
+		opacity: 0.5;
+	}
 }

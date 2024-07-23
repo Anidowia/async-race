@@ -56,9 +56,13 @@ const CarSection: React.FC<CarSectionProps> = ({
 			<div className={styles["car-container"]}>
 				<div className={styles["button-container"]}>
 					<div className={styles.race}>
-						<Button onClick={onStartClick}>{"\u25B6"}</Button>
+						<Button onClick={onStartClick} disabled={animatingCar}>
+							{"\u25B6"}
+						</Button>
 					</div>
-					<Button onClick={onStopClick}>{"\u23F9"}</Button>
+					<Button onClick={onStopClick} disabled={!animatingCar}>
+						{"\u23F9"}
+					</Button>
 				</div>
 				<div
 					id={`${name}`}

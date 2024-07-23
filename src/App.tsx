@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+
 import { AppDispatch, RootState } from "./store";
+import { addCarToGarage } from "./store/slices/garageSlice";
 
 import MainPage from "./pages/MainPage/MainPage";
 import Winners from "./pages/winners/Winners";
-
-import { addCarToGarage } from "./store/slices/garageSlice";
 
 interface CarPosition {
 	[key: string]: number;
@@ -51,13 +51,47 @@ const App: React.FC = () => {
 
 	const getRandomCarName = () => {
 		const carNames = [
-			"Toyota",
-			"Honda",
-			"Ford",
+			"Audi",
 			"Chevrolet",
-			"Mercedes",
-			"Kia",
+			"Cadillac",
+			"BMW",
+			"Ford",
+			"Buick",
+			"INFINITI",
+			"GMC",
+			"Honda",
 			"Hyundai",
+			"Jeep",
+			"Dodge",
+			"Jaguar",
+			"Kia",
+			"Land Rover",
+			"Lexus",
+			"Mercedes-Benz",
+			"Mitsubishi",
+			"Lincoln",
+			"MAZDA",
+			"Nissan",
+			"Porsche",
+			"Subaru",
+			"Toyota",
+			"Volkswagen",
+			"Volvo",
+			"Alfa Romeo",
+			"FIAT",
+			"Maserati",
+			"Tesla",
+			"Aston Martin",
+			"Bentley",
+			"Ferrari",
+			"Lamborghini",
+			"McLaren",
+			"Rolls-Royce",
+			"Suzuki",
+			"Fisker",
+			"Maybach",
+			"Oldsmobile",
+			"Daewoo",
 		];
 		return carNames[Math.floor(Math.random() * carNames.length)];
 	};
