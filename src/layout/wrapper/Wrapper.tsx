@@ -3,15 +3,9 @@ import React from "react";
 import Garage from "../../pages/garage/Garage";
 import Header from "../header/Header";
 
+import { AnimatingCars, CarPosition } from "../../common/interface/interface";
+
 import styles from "./Wrapper.module.scss";
-
-interface CarPosition {
-	[key: string]: number;
-}
-
-interface AnimatingCars {
-	[key: string]: boolean;
-}
 
 interface WrapperProps {
 	animatingCars: AnimatingCars;

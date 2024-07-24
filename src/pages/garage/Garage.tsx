@@ -5,18 +5,11 @@ import CarSection from "./components/CarSection";
 
 import { fetchCars } from "../../store/garage/thunk";
 import { AppDispatch, RootState } from "../../store/hooks/hooks";
-
-import styles from "./Garage.module.scss";
 import { EngineStatus } from "../../store/engine/types";
 import { driveEngine, toggleEngine } from "../../store/engine/thunk";
+import { AnimatingCars, CarPosition } from "../../common/interface/interface";
 
-interface CarPosition {
-	[key: string]: number;
-}
-
-interface AnimatingCars {
-	[key: string]: boolean;
-}
+import styles from "./Garage.module.scss";
 
 interface GarageProps {
 	animatingCars: AnimatingCars;
