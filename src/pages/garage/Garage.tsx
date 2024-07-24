@@ -6,7 +6,7 @@ import CarSection from "./components/CarSection";
 import { fetchCars } from "../../store/garage/thunk";
 import { AppDispatch, RootState } from "../../store/hooks/hooks";
 import { EngineStatus } from "../../store/engine/types";
-import { driveEngine, toggleEngine } from "../../store/engine/thunk";
+import { toggleEngine } from "../../store/engine/thunk";
 import { AnimatingCars, CarPosition } from "../../common/interface/interface";
 
 import styles from "./Garage.module.scss";
@@ -16,6 +16,7 @@ interface GarageProps {
 	pausedCars: CarPosition;
 	setPausedCars: React.Dispatch<React.SetStateAction<CarPosition>>;
 	setAnimatingCars: React.Dispatch<React.SetStateAction<AnimatingCars>>;
+	handleStartClick: (id: number, carName: string) => void;
 }
 
 const Garage: React.FC<GarageProps> = ({
@@ -23,6 +24,7 @@ const Garage: React.FC<GarageProps> = ({
 	pausedCars,
 	setPausedCars,
 	setAnimatingCars,
+	handleStartClick,
 }) => {
 	const dispatch: AppDispatch = useDispatch();
 	const { cars, status } = useSelector((state: RootState) => state.garage);
@@ -42,47 +44,6 @@ const Garage: React.FC<GarageProps> = ({
 			...prev,
 			[carName]: false,
 		}));
-	};
-
-	const handleStartClick = (id: number, carName: string) => {
-		dispatch(toggleEngine({ id, status: EngineStatus.START }))
-			.unwrap()
-			.then((data) => {
-				const duration = Math.round(data.distance / data.velocity / 1000);
-				setAnimatingCars((prev) => ({
-					...prev,
-					[carName]: true,
-				}));
-				setPausedCars((prevPaused) => ({
-					...prevPaused,
-					[carName]: 0,
-				}));
-
-				const carElement = document.getElementById(`${carName}`);
-				if (carElement) {
-					carElement.style.animationDuration = `${duration}s`;
-				}
-
-				dispatch(driveEngine({ id }))
-					.unwrap()
-					.catch(() => {
-						if (carElement) {
-							const currentTransform =
-								window.getComputedStyle(carElement).transform;
-							const matrix = new WebKitCSSMatrix(currentTransform);
-							const translateX = (matrix.m41 / window.innerWidth) * 100;
-
-							setPausedCars((prevPaused) => ({
-								...prevPaused,
-								[carName]: translateX,
-							}));
-							setAnimatingCars((prev) => ({
-								...prev,
-								[carName]: false,
-							}));
-						}
-					});
-			});
 	};
 
 	const handleStopClick = (id: number, carName: string) => {
