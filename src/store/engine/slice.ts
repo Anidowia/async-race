@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { EngineStatus, EngineStats } from "./types";
+import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../hooks/hooks";
+import { toggleEngine, driveEngine } from "./thunk";
 
 interface EngineState {
 	status: "idle" | "loading" | "succeeded" | "failed";
@@ -15,42 +15,6 @@ const initialState: EngineState = {
 	velocity: 0,
 	distance: 0,
 };
-
-export const toggleEngine = createAsyncThunk(
-	"engine/toggleEngine",
-	async ({ id, status }: { id: number; status: EngineStatus }) => {
-		const response = await fetch(
-			`http://localhost:3000/engine?id=${id}&status=${status}`,
-			{
-				method: "PATCH",
-			}
-		);
-		if (!response.ok) {
-			const error = await response.json();
-			throw new Error(error);
-		}
-		const data: EngineStats = await response.json();
-		return data;
-	}
-);
-
-export const driveEngine = createAsyncThunk(
-	"engine/driveEngine",
-	async ({ id }: { id: number }) => {
-		const response = await fetch(
-			`http://localhost:3000/engine?id=${id}&status=${EngineStatus.DRIVE}`,
-			{
-				method: "PATCH",
-			}
-		);
-		if (!response.ok) {
-			const error = await response.json();
-			throw new Error(error);
-		}
-		const data = await response.json();
-		return data;
-	}
-);
 
 const engineSlice = createSlice({
 	name: "engine",

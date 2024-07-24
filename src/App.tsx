@@ -8,7 +8,7 @@ import {
 	addCarToGarage,
 	fetchCarModels,
 	fetchCarNames,
-} from "./store/slices/garageSlice";
+} from "./store/garage/thunk";
 
 import Wrapper from "./layout/wrapper/Wrapper";
 import Winners from "./pages/winners/Winners";
@@ -57,12 +57,14 @@ const App: React.FC = () => {
 		list[Math.floor(Math.random() * list.length)];
 
 	const handleGenerateCars = async () => {
-		const carNames = await fetchCarNames();
-		const carModels = await fetchCarModels();
-		const newCarName = getRandomCarNameFromList(carNames);
-		const newCarModel = getRandomCarNameFromList(carModels);
+		const carNamesResponse = await dispatch(fetchCarNames()).unwrap();
+		const carModelsResponse = await dispatch(fetchCarModels()).unwrap();
+
+		const newCarName = getRandomCarNameFromList(carNamesResponse);
+		const newCarModel = getRandomCarNameFromList(carModelsResponse);
 		const newCarColor = getRandomColor();
 		const fullCarName = `${newCarName} ${newCarModel}`;
+
 		dispatch(addCarToGarage({ name: fullCarName, color: newCarColor }));
 	};
 

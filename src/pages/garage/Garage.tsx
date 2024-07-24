@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 
 import CarSection from "./components/CarSection";
 
-import { fetchCars } from "../../store/slices/garageSlice";
+import { fetchCars } from "../../store/garage/thunk";
 import { AppDispatch, RootState } from "../../store/hooks/hooks";
 
 import styles from "./Garage.module.scss";
 import { EngineStatus } from "../../store/engine/types";
-import { driveEngine, toggleEngine } from "../../store/engine/slice";
+import { driveEngine, toggleEngine } from "../../store/engine/thunk";
 
 interface CarPosition {
 	[key: string]: number;

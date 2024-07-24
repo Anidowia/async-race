@@ -3,12 +3,13 @@ import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 
-import Input from "../../components/input/Input";
+import Input from "../../common/input/Input";
 import Button from "../../common/button/Button";
 import HeaderLinks from "./components/HeaderLinks";
 
 import { AppDispatch, RootState } from "../../store/hooks/hooks";
-import { clearSelectedCar, updateCar } from "../../store/slices/garageSlice";
+import { clearSelectedCar } from "../../store/garage/slice";
+import { updateCar } from "../../store/garage/thunk";
 
 import styles from "./Header.module.scss";
 

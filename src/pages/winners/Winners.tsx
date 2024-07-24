@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { fetchWinners } from "../../store/slices/winnersSlice";
+import { fetchWinners } from "../../store/winners/thunk";
 import { AppDispatch, RootState } from "../../store/hooks/hooks";
-import { fetchCars } from "../../store/slices/garageSlice";
+import { fetchCars } from "../../store/garage/thunk";
 
 import Car from "../../common/cars/Car";
 

@@ -4,7 +4,8 @@ import { useDispatch } from "react-redux";
 import Button from "../../../common/button/Button";
 import Car from "../../../common/cars/Car";
 
-import { deleteCar, setSelectedCar } from "../../../store/slices/garageSlice";
+import { deleteCar } from "../../../store/garage/thunk";
+import { setSelectedCar } from "../../../store/garage/slice";
 import { AppDispatch } from "../../../store/hooks/hooks";
 
 import styles from "./CarSection.module.scss";
