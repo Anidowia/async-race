@@ -1,8 +1,8 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 
-import Button from "../../button/Button";
-import Car from "../../cars/Car";
+import Button from "../../../common/button/Button";
+import Car from "../../../common/cars/Car";
 
 import { deleteCar, setSelectedCar } from "../../../store/slices/garageSlice";
 import { AppDispatch } from "../../../store/hooks/hooks";

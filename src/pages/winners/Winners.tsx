@@ -5,10 +5,10 @@ import { fetchWinners } from "../../store/slices/winnersSlice";
 import { AppDispatch, RootState } from "../../store/hooks/hooks";
 import { fetchCars } from "../../store/slices/garageSlice";
 
-import Car from "../../components/cars/Car";
+import Car from "../../common/cars/Car";
 
 import styles from "./Winners.module.scss";
-import HeaderLinks from "../../components/header/components/HeaderLinks";
+import HeaderLinks from "../../layout/header/components/HeaderLinks";
 
 const Winners: React.FC = () => {
 	const dispatch: AppDispatch = useDispatch();

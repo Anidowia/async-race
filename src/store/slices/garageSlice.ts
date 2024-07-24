@@ -35,6 +35,36 @@ export const fetchCars = createAsyncThunk<Car[]>(
 	}
 );
 
+export const fetchCarNames = async () => {
+	const apiUrl =
+		"https://databases.one/api/?format=json&select=make&api_key=Your_Database_Api_Key";
+	const response = await fetch(apiUrl);
+	if (!response.ok) {
+		throw new Error("Failed to fetch car names");
+	}
+	const data = await response.json();
+	if (data && Array.isArray(data.result)) {
+		return data.result.map((car: { make: string }) => car.make);
+	}
+	throw new Error("Unexpected response format");
+};
+
+export const fetchCarModels = async () => {
+	const apiUrl =
+		"https://databases.one/api/?format=json&select=model&api_key=Your_Database_Api_Key";
+	const response = await fetch(apiUrl);
+	if (!response.ok) {
+		throw new Error("Failed to fetch car models");
+	}
+	const data = await response.json();
+
+	// Access the result property and map to get the car models
+	if (data && Array.isArray(data.result)) {
+		return data.result.map((model: { model: string }) => model.model);
+	}
+	throw new Error("Unexpected response format for models");
+};
+
 export const addCarToGarage = createAsyncThunk(
 	"garage/addCarToGarage",
 	async (car: { name: string; color: string }) => {

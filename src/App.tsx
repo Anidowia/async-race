@@ -4,9 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { RootState, AppDispatch } from "./store/hooks/hooks";
 
-import { addCarToGarage } from "./store/slices/garageSlice";
+import {
+	addCarToGarage,
+	fetchCarModels,
+	fetchCarNames,
+} from "./store/slices/garageSlice";
 
-import MainPage from "./pages/MainPage/MainPage";
+import Wrapper from "./layout/wrapper/Wrapper";
 import Winners from "./pages/winners/Winners";
 
 interface CarPosition {
@@ -23,13 +27,12 @@ const App: React.FC = () => {
 	const cars = useSelector((state: RootState) => state.garage.cars);
 
 	const [animatingCars, setAnimatingCars] = useState<AnimatingCars>({});
-	const [pausedCars, setPausedCars] = useState<CarPosition>({
-		BMW: 0,
-		Audi: 0,
-		Tesla: 0,
-	});
+	const [pausedCars, setPausedCars] = useState<CarPosition>(
+		Object.fromEntries(cars.map((car) => [car.name, 0]))
+	);
 
 	const stopAllCars = () => {
+		setPausedCars(Object.fromEntries(cars.map((car) => [car.name, 0])));
 		setAnimatingCars({});
 	};
 
@@ -45,62 +48,22 @@ const App: React.FC = () => {
 		dispatch(addCarToGarage({ name, color }));
 	};
 
-	const getRandomCarName = () => {
-		const carNames = [
-			"Audi",
-			"Chevrolet",
-			"Cadillac",
-			"BMW",
-			"Ford",
-			"Buick",
-			"INFINITI",
-			"GMC",
-			"Honda",
-			"Hyundai",
-			"Jeep",
-			"Dodge",
-			"Jaguar",
-			"Kia",
-			"Land Rover",
-			"Lexus",
-			"Mercedes-Benz",
-			"Mitsubishi",
-			"Lincoln",
-			"MAZDA",
-			"Nissan",
-			"Porsche",
-			"Subaru",
-			"Toyota",
-			"Volkswagen",
-			"Volvo",
-			"Alfa Romeo",
-			"FIAT",
-			"Maserati",
-			"Tesla",
-			"Aston Martin",
-			"Bentley",
-			"Ferrari",
-			"Lamborghini",
-			"McLaren",
-			"Rolls-Royce",
-			"Suzuki",
-			"Fisker",
-			"Maybach",
-			"Oldsmobile",
-			"Daewoo",
-		];
-		return carNames[Math.floor(Math.random() * carNames.length)];
-	};
-
 	const getRandomColor = () => {
 		const randomColor = Math.floor(Math.random() * 16777215).toString(16);
 		return `#${randomColor.padStart(6, "0")}`;
 	};
 
-	const handleGenerateCars = () => {
-		const newCarName = getRandomCarName();
+	const getRandomCarNameFromList = (list: string[]) =>
+		list[Math.floor(Math.random() * list.length)];
+
+	const handleGenerateCars = async () => {
+		const carNames = await fetchCarNames();
+		const carModels = await fetchCarModels();
+		const newCarName = getRandomCarNameFromList(carNames);
+		const newCarModel = getRandomCarNameFromList(carModels);
 		const newCarColor = getRandomColor();
-		dispatch(addCarToGarage({ name: newCarName, color: newCarColor }));
+		const fullCarName = `${newCarName} ${newCarModel}`;
+		dispatch(addCarToGarage({ name: fullCarName, color: newCarColor }));
 	};
 
 	return (
@@ -109,7 +72,7 @@ const App: React.FC = () => {
 				<Route
 					path="/"
 					element={
-						<MainPage
+						<Wrapper
 							animatingCars={animatingCars}
 							pausedCars={pausedCars}
 							setPausedCars={setPausedCars}

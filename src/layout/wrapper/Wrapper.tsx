@@ -1,9 +1,9 @@
 import React from "react";
 
-import Garage from "../../components/garage/Garage";
-import Header from "../../components/header/Header";
+import Garage from "../../pages/garage/Garage";
+import Header from "../header/Header";
 
-import styles from "./MainPage.module.scss";
+import styles from "./Wrapper.module.scss";
 
 interface CarPosition {
 	[key: string]: number;
@@ -13,7 +13,7 @@ interface AnimatingCars {
 	[key: string]: boolean;
 }
 
-interface MainPageProps {
+interface WrapperProps {
 	animatingCars: AnimatingCars;
 	pausedCars: CarPosition;
 	setPausedCars: React.Dispatch<React.SetStateAction<CarPosition>>;
@@ -24,7 +24,7 @@ interface MainPageProps {
 	onGenerateCars: () => void;
 }
 
-const MainPage: React.FC<MainPageProps> = ({
+const Wrapper: React.FC<WrapperProps> = ({
 	animatingCars,
 	pausedCars,
 	setPausedCars,
@@ -34,7 +34,7 @@ const MainPage: React.FC<MainPageProps> = ({
 	onCreateCar,
 	onGenerateCars,
 }) => (
-	<div className={styles.main}>
+	<main className={styles.main}>
 		<Header
 			onRaceClick={onRaceClick}
 			onResetClick={onResetClick}
@@ -47,7 +47,7 @@ const MainPage: React.FC<MainPageProps> = ({
 			setPausedCars={setPausedCars}
 			setAnimatingCars={setAnimatingCars}
 		/>
-	</div>
+	</main>
 );
 
-export default MainPage;
+export default Wrapper;

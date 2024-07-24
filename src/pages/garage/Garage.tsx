@@ -55,7 +55,7 @@ const Garage: React.FC<GarageProps> = ({
 		dispatch(toggleEngine({ id, status: EngineStatus.START }))
 			.unwrap()
 			.then((data) => {
-				const duration = data.distance / data.velocity;
+				const duration = Math.round(data.distance / data.velocity / 1000);
 				setAnimatingCars((prev) => ({
 					...prev,
 					[carName]: true,
@@ -65,10 +65,14 @@ const Garage: React.FC<GarageProps> = ({
 					[carName]: 0,
 				}));
 
+				const carElement = document.getElementById(`${carName}`);
+				if (carElement) {
+					carElement.style.animationDuration = `${duration}s`;
+				}
+
 				dispatch(driveEngine({ id }))
 					.unwrap()
 					.catch(() => {
-						const carElement = document.getElementById(`${carName}`);
 						if (carElement) {
 							const currentTransform =
 								window.getComputedStyle(carElement).transform;
@@ -85,10 +89,6 @@ const Garage: React.FC<GarageProps> = ({
 							}));
 						}
 					});
-
-				setTimeout(() => {
-					handleAnimationEnd(carName);
-				}, duration * 1000);
 			});
 	};
 
@@ -96,6 +96,10 @@ const Garage: React.FC<GarageProps> = ({
 		dispatch(toggleEngine({ id, status: EngineStatus.STOP }))
 			.unwrap()
 			.then(() => {
+				const carElement = document.getElementById(`${carName}`);
+				if (carElement) {
+					carElement.style.transform = "translateX(0)";
+				}
 				setPausedCars((prevPaused) => ({
 					...prevPaused,
 					[carName]: 0,
