@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
 import { Car, GarageState } from "./types";
 import { fetchCars, addCarToGarage, deleteCar, updateCar } from "./thunk";
 
@@ -9,6 +10,7 @@ const initialState: GarageState = {
 	selectedCar: null,
 	velocity: null,
 	distance: null,
+	firstCarFinished: null,
 };
 
 const garageSlice = createSlice({
@@ -22,6 +24,14 @@ const garageSlice = createSlice({
 		clearSelectedCar: (state) => ({
 			...state,
 			selectedCar: null,
+		}),
+		setFirstCarFinished: (state, action: PayloadAction<string | null>) => ({
+			...state,
+			firstCarFinished: action.payload,
+		}),
+		clearFirstCarFinished: (state) => ({
+			...state,
+			firstCarFinished: null,
 		}),
 	},
 	extraReducers: (builder) => {
@@ -73,5 +83,10 @@ const garageSlice = createSlice({
 	},
 });
 
-export const { setSelectedCar, clearSelectedCar } = garageSlice.actions;
+export const {
+	setSelectedCar,
+	clearSelectedCar,
+	setFirstCarFinished,
+	clearFirstCarFinished,
+} = garageSlice.actions;
 export default garageSlice.reducer;

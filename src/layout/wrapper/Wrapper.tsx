@@ -4,72 +4,41 @@ import { useDispatch, useSelector } from "react-redux";
 import Garage from "../../pages/garage/Garage";
 import Header from "../header/Header";
 
-import { AnimatingCars, CarPosition } from "../../common/interface/interface";
+import { AnimatingCars } from "../../common/interface/interface";
 import { AppDispatch, RootState } from "../../store/hooks/hooks";
 import { addCarToGarage } from "../../store/garage/thunk";
 import { generateCar } from "../../helpers/generateCar";
-import { EngineStatus } from "../../store/engine/types";
-import { driveEngine, toggleEngine } from "../../store/engine/thunk";
+import { handleStartClick, handleStopClick } from "../../utils/animation";
+import { setFirstCarFinished } from "../../store/garage/slice";
 
 import styles from "./Wrapper.module.scss";
 
 const Wrapper: React.FC = () => {
 	const dispatch: AppDispatch = useDispatch();
 	const cars = useSelector((state: RootState) => state.garage.cars);
+	const firstCarFinished = useSelector(
+		(state: RootState) => state.garage.firstCarFinished
+	);
+	const pausedCars = useSelector((state: RootState) => state.pausedCar);
 
 	const [animatingCars, setAnimatingCars] = useState<AnimatingCars>({});
-	const [pausedCars, setPausedCars] = useState<CarPosition>(
-		Object.fromEntries(cars.map((car) => [car.name, 0]))
-	);
 
-	const handleStartClick = (id: number, carName: string) => {
-		dispatch(toggleEngine({ id, status: EngineStatus.START }))
-			.unwrap()
-			.then((data) => {
-				const duration = Math.round(data.distance / data.velocity / 1000);
-				setAnimatingCars((prev) => ({
-					...prev,
-					[carName]: true,
-				}));
-				setPausedCars((prevPaused) => ({
-					...prevPaused,
-					[carName]: 0,
-				}));
+	const startCar = handleStartClick(dispatch, cars, setAnimatingCars);
+	const stopCar = handleStopClick(dispatch, setAnimatingCars);
 
-				const carElement = document.getElementById(`${carName}`);
-				if (carElement) {
-					carElement.style.animationDuration = `${duration}s`;
-				}
+	const handleStartClickWrapper = (id: number, carName: string) =>
+		startCar(id, carName);
 
-				dispatch(driveEngine({ id }))
-					.unwrap()
-					.catch(() => {
-						if (carElement) {
-							const currentTransform =
-								window.getComputedStyle(carElement).transform;
-							const matrix = new WebKitCSSMatrix(currentTransform);
-							const translateX = (matrix.m41 / window.innerWidth) * 100;
-
-							setPausedCars((prevPaused) => ({
-								...prevPaused,
-								[carName]: translateX,
-							}));
-							setAnimatingCars((prev) => ({
-								...prev,
-								[carName]: false,
-							}));
-						}
-					});
-			});
-	};
+	const handleStopClickWrapper = (id: number, carName: string) =>
+		stopCar(id, carName);
 
 	const stopAllCars = () => {
-		setPausedCars(Object.fromEntries(cars.map((car) => [car.name, 0])));
-		setAnimatingCars({});
+		cars.forEach((car) => handleStopClickWrapper(car.id, car.name));
 	};
 
 	const handleRaceClick = () => {
-		cars.forEach((car) => handleStartClick(car.id, car.name));
+		cars.forEach((car) => handleStartClickWrapper(car.id, car.name));
+		dispatch(setFirstCarFinished(null));
 	};
 
 	const handleCreateCar = (name: string, color: string) => {
@@ -92,9 +61,10 @@ const Wrapper: React.FC = () => {
 				<Garage
 					animatingCars={animatingCars}
 					pausedCars={pausedCars}
-					setPausedCars={setPausedCars}
 					setAnimatingCars={setAnimatingCars}
-					handleStartClick={handleStartClick}
+					handleStartClick={handleStartClickWrapper}
+					handleStopClick={handleStopClickWrapper}
+					firstCarFinished={firstCarFinished}
 				/>
 			</main>
 		</div>

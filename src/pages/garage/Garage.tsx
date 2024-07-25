@@ -5,26 +5,29 @@ import CarSection from "./components/CarSection";
 
 import { fetchCars } from "../../store/garage/thunk";
 import { AppDispatch, RootState } from "../../store/hooks/hooks";
-import { EngineStatus } from "../../store/engine/types";
-import { toggleEngine } from "../../store/engine/thunk";
 import { AnimatingCars, CarPosition } from "../../common/interface/interface";
+import { handleAnimationEnd } from "../../utils/animation";
+import { setFirstCarFinished } from "../../store/garage/slice";
+import { setPausedCar } from "../../store/car/slice";
 
 import styles from "./Garage.module.scss";
 
 interface GarageProps {
 	animatingCars: AnimatingCars;
 	pausedCars: CarPosition;
-	setPausedCars: React.Dispatch<React.SetStateAction<CarPosition>>;
 	setAnimatingCars: React.Dispatch<React.SetStateAction<AnimatingCars>>;
 	handleStartClick: (id: number, carName: string) => void;
+	handleStopClick: (id: number, carName: string) => void;
+	firstCarFinished: string | null;
 }
 
 const Garage: React.FC<GarageProps> = ({
 	animatingCars,
 	pausedCars,
-	setPausedCars,
 	setAnimatingCars,
 	handleStartClick,
+	handleStopClick,
+	firstCarFinished,
 }) => {
 	const dispatch: AppDispatch = useDispatch();
 	const { cars, status } = useSelector((state: RootState) => state.garage);
@@ -35,38 +38,18 @@ const Garage: React.FC<GarageProps> = ({
 		}
 	}, [status, dispatch]);
 
-	const handleAnimationEnd = (carName: string) => {
-		setPausedCars((prevPaused) => ({
-			...prevPaused,
-			[carName]: 88,
-		}));
-		setAnimatingCars((prev) => ({
-			...prev,
-			[carName]: false,
-		}));
-	};
-
-	const handleStopClick = (id: number, carName: string) => {
-		dispatch(toggleEngine({ id, status: EngineStatus.STOP }))
-			.unwrap()
-			.then(() => {
-				const carElement = document.getElementById(`${carName}`);
-				if (carElement) {
-					carElement.style.transform = "translateX(0)";
-				}
-				setPausedCars((prevPaused) => ({
-					...prevPaused,
-					[carName]: 0,
-				}));
-				setAnimatingCars((prev) => ({
-					...prev,
-					[carName]: false,
-				}));
-			});
+	const AnimationEnd = (carName: string) => {
+		handleAnimationEnd(
+			carName,
+			(position) => dispatch(setPausedCar({ carName, position })),
+			setAnimatingCars,
+			firstCarFinished,
+			(newFirstCar: string | null) => dispatch(setFirstCarFinished(newFirstCar))
+		);
 	};
 
 	return (
-		<div className={styles.garage}>
+		<section className={styles.garage}>
 			{cars.map((car) => (
 				<CarSection
 					key={car.id}
@@ -77,10 +60,10 @@ const Garage: React.FC<GarageProps> = ({
 					onStopClick={() => handleStopClick(car.id, car.name)}
 					animatingCar={animatingCars[car.name] || false}
 					pausedPosition={pausedCars[car.name] || 0}
-					onAnimationEnd={() => handleAnimationEnd(car.name)}
+					onAnimationEnd={() => AnimationEnd(car.name)}
 				/>
 			))}
-		</div>
+		</section>
 	);
 };
 

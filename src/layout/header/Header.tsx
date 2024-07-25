@@ -70,7 +70,7 @@ const Header: React.FC<HeaderProps> = ({
 		<>
 			<HeaderLinks />
 
-			<div className={styles.grid}>
+			<nav className={styles.grid}>
 				<div className={styles.buttons}>
 					<div className={styles["buttons-create"]}>
 						<Formik
@@ -137,7 +137,7 @@ const Header: React.FC<HeaderProps> = ({
 					<h2>Cars: {cars.length}</h2>
 					<h2>Page 1/1</h2>
 				</div>
-			</div>
+			</nav>
 		</>
 	);
 };

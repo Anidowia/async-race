@@ -25,6 +25,13 @@
 				"devDependencies": true
 			}
 		],
-		"import/no-cycle": [2, { "maxDepth": 1 }]
+		"import/no-cycle": [2, { "maxDepth": 1 }],
+		"no-param-reassign": [
+			2,
+			{
+				"props": true,
+				"ignorePropertyModificationsFor": ["state"]
+			}
+		]
 	}
 }

@@ -83,7 +83,7 @@
 	}
 
 	.pausedCar {
-		animation: none;
+		animation-play-state: paused;
 	}
 
 	@keyframes moveCar {

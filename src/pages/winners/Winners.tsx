@@ -31,7 +31,7 @@ const Winners: React.FC = () => {
 	return (
 		<>
 			<HeaderLinks />
-			<div className={styles.winners}>
+			<section className={styles.winners}>
 				<h2>Winners: {winners.length}</h2>
 				<h2>Page 1/1</h2>
 				<table>
@@ -65,7 +65,7 @@ const Winners: React.FC = () => {
 						})}
 					</tbody>
 				</table>
-			</div>
+			</section>
 		</>
 	);
 };
