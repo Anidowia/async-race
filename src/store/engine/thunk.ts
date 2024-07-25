@@ -17,7 +17,10 @@ export const driveEngine = createAsyncThunk(
 	"engine/driveEngine",
 	async ({ id }: { id: number }) => {
 		const url = `${Url}/engine?id=${id}&status=${EngineStatus.DRIVE}`;
+		const startTime = performance.now();
 		const data = await patchRequest(url);
-		return data;
+		const endTime = performance.now();
+		const duration = endTime - startTime;
+		return { data, duration };
 	}
 );

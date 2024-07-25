@@ -9,7 +9,7 @@ import { AppDispatch, RootState } from "../../store/hooks/hooks";
 import { addCarToGarage } from "../../store/garage/thunk";
 import { generateCar } from "../../helpers/generateCar";
 import { handleStartClick, handleStopClick } from "../../utils/animation";
-import { setFirstCarFinished } from "../../store/garage/slice";
+import { clearFirstCarFinished } from "../../store/garage/slice";
 
 import styles from "./Wrapper.module.scss";
 
@@ -34,11 +34,12 @@ const Wrapper: React.FC = () => {
 
 	const stopAllCars = () => {
 		cars.forEach((car) => handleStopClickWrapper(car.id, car.name));
+		dispatch(clearFirstCarFinished());
 	};
 
 	const handleRaceClick = () => {
 		cars.forEach((car) => handleStartClickWrapper(car.id, car.name));
-		dispatch(setFirstCarFinished(null));
+		dispatch(clearFirstCarFinished());
 	};
 
 	const handleCreateCar = (name: string, color: string) => {

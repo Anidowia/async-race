@@ -13,14 +13,14 @@ import storage from "redux-persist/lib/storage";
 
 import garageReducer from "./garage/slice";
 import winnersReducer from "./winners/slice";
-import engineSlice from "./engine/slice";
-import pausedCarSlice from "./car/slice";
+import engineReducer from "./engine/slice";
+import pausedCarReducer from "./car/slice";
 
 const rootReducer = combineReducers({
 	garage: garageReducer,
 	winners: winnersReducer,
-	engine: engineSlice,
-	pausedCar: pausedCarSlice,
+	engine: engineReducer,
+	pausedCar: pausedCarReducer,
 });
 
 const persistConfig = {

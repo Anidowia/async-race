@@ -2,12 +2,16 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import CarSection from "./components/CarSection";
+import WinnerBanner from "../../layout/winnerBanner/WinnerBanner";
 
 import { fetchCars } from "../../store/garage/thunk";
 import { AppDispatch, RootState } from "../../store/hooks/hooks";
 import { AnimatingCars, CarPosition } from "../../common/interface/interface";
 import { handleAnimationEnd } from "../../utils/animation";
-import { setFirstCarFinished } from "../../store/garage/slice";
+import {
+	clearFirstCarFinished,
+	setFirstCarFinished,
+} from "../../store/garage/slice";
 import { setPausedCar } from "../../store/car/slice";
 
 import styles from "./Garage.module.scss";
@@ -38,18 +42,27 @@ const Garage: React.FC<GarageProps> = ({
 		}
 	}, [status, dispatch]);
 
+	useEffect(() => {
+		dispatch(clearFirstCarFinished());
+	}, [dispatch]);
+
 	const AnimationEnd = (carName: string) => {
 		handleAnimationEnd(
 			carName,
 			(position) => dispatch(setPausedCar({ carName, position })),
 			setAnimatingCars,
 			firstCarFinished,
-			(newFirstCar: string | null) => dispatch(setFirstCarFinished(newFirstCar))
+			(newFirstCar: string | null) => {
+				if (firstCarFinished === null) {
+					dispatch(setFirstCarFinished(newFirstCar));
+				}
+			}
 		);
 	};
 
 	return (
 		<section className={styles.garage}>
+			{firstCarFinished != null && <WinnerBanner />}
 			{cars.map((car) => (
 				<CarSection
 					key={car.id}

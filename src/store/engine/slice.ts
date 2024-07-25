@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../hooks/hooks";
 import { toggleEngine, driveEngine } from "./thunk";
 
@@ -7,6 +7,8 @@ interface EngineState {
 	error: string | null;
 	velocity: number;
 	distance: number;
+	winnerTime: number | null;
+	data: any;
 }
 
 const initialState: EngineState = {
@@ -14,12 +16,18 @@ const initialState: EngineState = {
 	error: null,
 	velocity: 0,
 	distance: 0,
+	winnerTime: null,
+	data: null,
 };
 
 const engineSlice = createSlice({
 	name: "engine",
 	initialState,
-	reducers: {},
+	reducers: {
+		setWinnerTime(state, action: PayloadAction<number>) {
+			state.winnerTime = action.payload;
+		},
+	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(toggleEngine.pending, (state) => ({
@@ -43,10 +51,11 @@ const engineSlice = createSlice({
 				status: "loading",
 				error: null,
 			}))
-			.addCase(driveEngine.fulfilled, (state) => ({
-				...state,
-				status: "succeeded",
-			}))
+			.addCase(driveEngine.fulfilled, (state, action) => {
+				state.status = "succeeded";
+				state.data = action.payload.data;
+				state.winnerTime = action.payload.duration;
+			})
 			.addCase(driveEngine.rejected, (state, action) => ({
 				...state,
 				status: "failed",
@@ -55,6 +64,9 @@ const engineSlice = createSlice({
 	},
 });
 
+export const { setWinnerTime } = engineSlice.actions;
+
 export default engineSlice.reducer;
 
 export const selectEngineState = (state: RootState) => state.engine;
+export const selectWinnerTime = (state: RootState) => state.engine.winnerTime;
