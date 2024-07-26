@@ -8,7 +8,7 @@ import { AnimatingCars } from "../../common/interface/interface";
 import { AppDispatch, RootState } from "../../store/hooks/hooks";
 import { addCarToGarage } from "../../store/garage/thunk";
 import { generateCar } from "../../helpers/generateCar";
-import { handleStartClick, handleStopClick } from "../../utils/animation";
+import { startRace, stopRace } from "../../utils/animation";
 import { clearFirstCarFinished } from "../../store/garage/slice";
 
 import styles from "./Wrapper.module.scss";
@@ -23,22 +23,21 @@ const Wrapper: React.FC = () => {
 
 	const [animatingCars, setAnimatingCars] = useState<AnimatingCars>({});
 
-	const startCar = handleStartClick(dispatch, cars, setAnimatingCars);
-	const stopCar = handleStopClick(dispatch, setAnimatingCars);
+	const startCar = startRace(dispatch, cars, setAnimatingCars);
+	const stopCar = stopRace(dispatch, setAnimatingCars);
 
-	const handleStartClickWrapper = (id: number, carName: string) =>
+	const startRaceWrapper = (id: number, carName: string) =>
 		startCar(id, carName);
 
-	const handleStopClickWrapper = (id: number, carName: string) =>
-		stopCar(id, carName);
+	const stopRaceWrapper = (id: number, carName: string) => stopCar(id, carName);
 
 	const stopAllCars = () => {
-		cars.forEach((car) => handleStopClickWrapper(car.id, car.name));
+		cars.forEach((car) => stopRaceWrapper(car.id, car.name));
 		dispatch(clearFirstCarFinished());
 	};
 
 	const handleRaceClick = () => {
-		cars.forEach((car) => handleStartClickWrapper(car.id, car.name));
+		cars.forEach((car) => startRaceWrapper(car.id, car.name));
 		dispatch(clearFirstCarFinished());
 	};
 
@@ -63,8 +62,8 @@ const Wrapper: React.FC = () => {
 					animatingCars={animatingCars}
 					pausedCars={pausedCars}
 					setAnimatingCars={setAnimatingCars}
-					handleStartClick={handleStartClickWrapper}
-					handleStopClick={handleStopClickWrapper}
+					startRace={startRaceWrapper}
+					stopRace={stopRaceWrapper}
 					firstCarFinished={firstCarFinished}
 				/>
 			</main>

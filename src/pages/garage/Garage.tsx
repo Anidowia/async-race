@@ -7,12 +7,13 @@ import WinnerBanner from "../../layout/winnerBanner/WinnerBanner";
 import { fetchCars } from "../../store/garage/thunk";
 import { AppDispatch, RootState } from "../../store/hooks/hooks";
 import { AnimatingCars, CarPosition } from "../../common/interface/interface";
-import { handleAnimationEnd } from "../../utils/animation";
+import { controlRaceEnd } from "../../utils/animation";
 import {
 	clearFirstCarFinished,
 	setFirstCarFinished,
 } from "../../store/garage/slice";
 import { setPausedCar } from "../../store/car/slice";
+import { clearWinnerTime, setWinnerName } from "../../store/engine/slice";
 
 import styles from "./Garage.module.scss";
 
@@ -20,8 +21,8 @@ interface GarageProps {
 	animatingCars: AnimatingCars;
 	pausedCars: CarPosition;
 	setAnimatingCars: React.Dispatch<React.SetStateAction<AnimatingCars>>;
-	handleStartClick: (id: number, carName: string) => void;
-	handleStopClick: (id: number, carName: string) => void;
+	startRace: (id: number, carName: string) => void;
+	stopRace: (id: number, carName: string) => void;
 	firstCarFinished: string | null;
 }
 
@@ -29,12 +30,13 @@ const Garage: React.FC<GarageProps> = ({
 	animatingCars,
 	pausedCars,
 	setAnimatingCars,
-	handleStartClick,
-	handleStopClick,
+	startRace,
+	stopRace,
 	firstCarFinished,
 }) => {
 	const dispatch: AppDispatch = useDispatch();
 	const { cars, status } = useSelector((state: RootState) => state.garage);
+	const winnerTime = useSelector((state: RootState) => state.engine.winnerTime);
 
 	useEffect(() => {
 		if (status === "idle") {
@@ -44,16 +46,18 @@ const Garage: React.FC<GarageProps> = ({
 
 	useEffect(() => {
 		dispatch(clearFirstCarFinished());
+		dispatch(clearWinnerTime());
 	}, [dispatch]);
 
 	const AnimationEnd = (carName: string) => {
-		handleAnimationEnd(
+		controlRaceEnd(
 			carName,
 			(position) => dispatch(setPausedCar({ carName, position })),
 			setAnimatingCars,
 			firstCarFinished,
 			(newFirstCar: string | null) => {
 				if (firstCarFinished === null) {
+					dispatch(setWinnerName(newFirstCar!));
 					dispatch(setFirstCarFinished(newFirstCar));
 				}
 			}
@@ -62,15 +66,15 @@ const Garage: React.FC<GarageProps> = ({
 
 	return (
 		<section className={styles.garage}>
-			{firstCarFinished != null && <WinnerBanner />}
+			{firstCarFinished != null && winnerTime !== null && <WinnerBanner />}
 			{cars.map((car) => (
 				<CarSection
 					key={car.id}
 					id={car.id}
 					name={car.name}
 					color={car.color}
-					onStartClick={() => handleStartClick(car.id, car.name)}
-					onStopClick={() => handleStopClick(car.id, car.name)}
+					onStartClick={() => startRace(car.id, car.name)}
+					onStopClick={() => stopRace(car.id, car.name)}
 					animatingCar={animatingCars[car.name] || false}
 					pausedPosition={pausedCars[car.name] || 0}
 					onAnimationEnd={() => AnimationEnd(car.name)}

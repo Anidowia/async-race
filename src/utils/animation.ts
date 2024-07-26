@@ -4,7 +4,7 @@ import { driveEngine, toggleEngine } from "../store/engine/thunk";
 import { EngineStatus } from "../store/engine/types";
 import { AppDispatch } from "../store/hooks/hooks";
 
-export const handleStartClick =
+export const startRace =
 	(
 		dispatch: AppDispatch,
 		cars: { id: number; name: string }[],
@@ -44,7 +44,7 @@ export const handleStartClick =
 			});
 	};
 
-export const handleStopClick =
+export const stopRace =
 	(
 		dispatch: AppDispatch,
 		setAnimatingCars: React.Dispatch<React.SetStateAction<AnimatingCars>>
@@ -65,7 +65,7 @@ export const handleStopClick =
 			});
 	};
 
-export const handleAnimationEnd = (
+export const controlRaceEnd = (
 	carName: string,
 	updatePausedCar: (position: number) => void,
 	setAnimatingCars: React.Dispatch<

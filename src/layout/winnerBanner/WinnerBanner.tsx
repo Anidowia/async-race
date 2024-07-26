@@ -6,11 +6,14 @@ import { RootState } from "../../store/hooks/hooks";
 import styles from "./WinnerBanner.module.scss";
 
 const WinnerBanner: React.FC = () => {
-	const winnerTime = useSelector((state: RootState) => state.engine.winnerTime);
+	const { winnerTime, winnerName } = useSelector(
+		(state: RootState) => state.engine
+	);
 
 	return (
 		<div className={styles.banner}>
 			<h1>WINNER</h1>
+			{winnerName && <p>First Car: {winnerName}</p>}
 			{winnerTime !== null && <p>TIME: {(winnerTime / 1000).toFixed(2)} s</p>}
 		</div>
 	);
