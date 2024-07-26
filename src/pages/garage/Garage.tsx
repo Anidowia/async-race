@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import CarSection from "./components/CarSection";
@@ -8,13 +8,11 @@ import { fetchCars } from "../../store/garage/thunk";
 import { AppDispatch, RootState } from "../../store/hooks/hooks";
 import { AnimatingCars, CarPosition } from "../../common/interface/interface";
 import { controlRaceEnd } from "../../utils/animation";
-import {
-	clearFirstCarFinished,
-	setFirstCarFinished,
-} from "../../store/garage/slice";
+import { setFirstCarFinished } from "../../store/garage/slice";
 import { setPausedCar } from "../../store/car/slice";
-import { clearWinnerTime, setWinnerName } from "../../store/engine/slice";
-import { sendWinnerData } from "../../store/winners/thunk";
+import { addWinner } from "../../store/winners/thunk";
+import { setCurrentPage } from "../../store/pages/slice";
+import { setWinnerName } from "../../store/engine/slice";
 
 import styles from "./Garage.module.scss";
 
@@ -35,10 +33,15 @@ const Garage: React.FC<GarageProps> = ({
 	stopRace,
 	firstCarFinished,
 }) => {
+	const [shortestTime, setShortestTime] = useState<number | null>(null);
+
 	const dispatch: AppDispatch = useDispatch();
 	const { cars, status } = useSelector((state: RootState) => state.garage);
 	const { winnerTime, winnerName } = useSelector(
 		(state: RootState) => state.engine
+	);
+	const { currentPage, carsPerPage } = useSelector(
+		(state: RootState) => state.page
 	);
 
 	useEffect(() => {
@@ -49,14 +52,19 @@ const Garage: React.FC<GarageProps> = ({
 
 	useEffect(() => {
 		if (winnerName && winnerTime !== null) {
-			sendWinnerData(winnerName, winnerTime, cars, dispatch);
+			if (shortestTime === null || winnerTime < shortestTime) {
+				setShortestTime(winnerTime);
+				addWinner(winnerName, winnerTime, cars, dispatch);
+			}
 		}
-	}, [winnerName, winnerTime, cars]);
+	}, [winnerName, winnerTime, cars, dispatch, shortestTime]);
 
-	useEffect(() => {
-		dispatch(clearFirstCarFinished());
-		dispatch(clearWinnerTime());
-	}, [dispatch]);
+	const handlePageAdjustment = () => {
+		const totalPages = Math.ceil(cars.length / carsPerPage);
+		if (currentPage > totalPages && totalPages > 0) {
+			dispatch(setCurrentPage(totalPages));
+		}
+	};
 
 	const AnimationEnd = (carName: string) => {
 		controlRaceEnd(
@@ -73,6 +81,15 @@ const Garage: React.FC<GarageProps> = ({
 		);
 	};
 
+	useEffect(() => {
+		handlePageAdjustment();
+	}, [cars.length, currentPage, carsPerPage, dispatch]);
+
+	const paginatedCars = cars.slice(
+		(currentPage - 1) * carsPerPage,
+		currentPage * carsPerPage
+	);
+
 	return (
 		<section className={styles.garage}>
 			{cars.length === 0 ? (
@@ -80,7 +97,7 @@ const Garage: React.FC<GarageProps> = ({
 			) : (
 				<>
 					{firstCarFinished != null && winnerTime !== null && <WinnerBanner />}
-					{cars.map((car) => (
+					{paginatedCars.map((car) => (
 						<CarSection
 							key={car.id}
 							id={car.id}

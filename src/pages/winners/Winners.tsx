@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { fetchWinners } from "../../store/winners/thunk";
@@ -28,8 +28,9 @@ const Winners: React.FC = () => {
 		}
 	}, [winnersStatus, carsStatus, dispatch]);
 
-	const filteredWinners = winners.filter((winner) =>
-		cars.some((car) => car.id === winner.id)
+	const filteredWinners = useMemo(
+		() => winners.filter((winner) => cars.some((car) => car.id === winner.id)),
+		[winners, cars]
 	);
 
 	return (

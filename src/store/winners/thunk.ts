@@ -20,7 +20,8 @@ export const fetchWinners = createAsyncThunk<Winner[]>(
 		if (!response.ok) {
 			throw new Error("Failed to fetch winners");
 		}
-		return response.json();
+		const data = await response.json();
+		return data;
 	}
 );
 
@@ -39,7 +40,7 @@ const getCurrentWins = async (carId: number): Promise<number | null> => {
 	}
 };
 
-export const sendWinnerData = async (
+export const addWinner = async (
 	carName: string,
 	winnerTime: number,
 	cars: Array<{ id: number; name: string }>,
@@ -59,10 +60,10 @@ export const sendWinnerData = async (
 		if (wins > 0) {
 			await putRequest(`${url}/${carId}`, { wins: wins + 1, time: winnerTime });
 		} else {
-			await postRequest(url, { id: carId, wins: wins + 1, time: winnerTime });
+			await postRequest(url, { id: carId, wins: 1, time: winnerTime });
 		}
 
-		dispatch(fetchWinners());
+		await dispatch(fetchWinners());
 	} catch (error) {
 		console.error("Error:", error);
 	}

@@ -15,17 +15,20 @@ import garageReducer from "./garage/slice";
 import winnersReducer from "./winners/slice";
 import engineReducer from "./engine/slice";
 import pausedCarReducer from "./car/slice";
+import pageReducer from "./pages/slice";
 
 const rootReducer = combineReducers({
 	garage: garageReducer,
 	winners: winnersReducer,
 	engine: engineReducer,
 	pausedCar: pausedCarReducer,
+	page: pageReducer,
 });
 
 const persistConfig = {
 	key: "root",
 	storage,
+	whitelist: ["pausedCar"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
