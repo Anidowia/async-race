@@ -7,6 +7,7 @@ import {
 	postRequest,
 	putRequest,
 } from "../../common/api/requests";
+import { fetchWinners } from "../winners/thunk";
 
 export const fetchCars = createAsyncThunk("garage/fetchCars", async () => {
 	const url = `${Url}/garage`;
@@ -50,9 +51,22 @@ export const addCarToGarage = createAsyncThunk(
 export const deleteCar = createAsyncThunk(
 	"garage/deleteCar",
 	async (carId: number, { dispatch }) => {
-		const url = `${Url}/garage/${carId}`;
-		await deleteRequest(url);
+		const carUrl = `${Url}/garage/${carId}`;
+		const winnerUrl = `${Url}/winners/${carId}`;
+
+		await deleteRequest(carUrl);
+
+		try {
+			const response = await fetch(winnerUrl);
+			if (response.ok) {
+				await deleteRequest(winnerUrl);
+			}
+		} catch (error) {
+			console.error("Error checking or deleting the winner:", error);
+		}
+
 		dispatch(fetchCars());
+		dispatch(fetchWinners());
 		return carId;
 	}
 );

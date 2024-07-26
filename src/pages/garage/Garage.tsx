@@ -14,6 +14,7 @@ import {
 } from "../../store/garage/slice";
 import { setPausedCar } from "../../store/car/slice";
 import { clearWinnerTime, setWinnerName } from "../../store/engine/slice";
+import { sendWinnerData } from "../../store/winners/thunk";
 
 import styles from "./Garage.module.scss";
 
@@ -36,13 +37,21 @@ const Garage: React.FC<GarageProps> = ({
 }) => {
 	const dispatch: AppDispatch = useDispatch();
 	const { cars, status } = useSelector((state: RootState) => state.garage);
-	const winnerTime = useSelector((state: RootState) => state.engine.winnerTime);
+	const { winnerTime, winnerName } = useSelector(
+		(state: RootState) => state.engine
+	);
 
 	useEffect(() => {
 		if (status === "idle") {
 			dispatch(fetchCars());
 		}
 	}, [status, dispatch]);
+
+	useEffect(() => {
+		if (winnerName && winnerTime !== null) {
+			sendWinnerData(winnerName, winnerTime, cars, dispatch);
+		}
+	}, [winnerName, winnerTime, cars]);
 
 	useEffect(() => {
 		dispatch(clearFirstCarFinished());
@@ -66,20 +75,26 @@ const Garage: React.FC<GarageProps> = ({
 
 	return (
 		<section className={styles.garage}>
-			{firstCarFinished != null && winnerTime !== null && <WinnerBanner />}
-			{cars.map((car) => (
-				<CarSection
-					key={car.id}
-					id={car.id}
-					name={car.name}
-					color={car.color}
-					onStartClick={() => startRace(car.id, car.name)}
-					onStopClick={() => stopRace(car.id, car.name)}
-					animatingCar={animatingCars[car.name] || false}
-					pausedPosition={pausedCars[car.name] || 0}
-					onAnimationEnd={() => AnimationEnd(car.name)}
-				/>
-			))}
+			{cars.length === 0 ? (
+				<h3>Oops! No cars in the garage :(</h3>
+			) : (
+				<>
+					{firstCarFinished != null && winnerTime !== null && <WinnerBanner />}
+					{cars.map((car) => (
+						<CarSection
+							key={car.id}
+							id={car.id}
+							name={car.name}
+							color={car.color}
+							onStartClick={() => startRace(car.id, car.name)}
+							onStopClick={() => stopRace(car.id, car.name)}
+							animatingCar={animatingCars[car.name] || false}
+							pausedPosition={pausedCars[car.name] || 0}
+							onAnimationEnd={() => AnimationEnd(car.name)}
+						/>
+					))}
+				</>
+			)}
 		</section>
 	);
 };

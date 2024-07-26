@@ -28,11 +28,15 @@ const Winners: React.FC = () => {
 		}
 	}, [winnersStatus, carsStatus, dispatch]);
 
+	const filteredWinners = winners.filter((winner) =>
+		cars.some((car) => car.id === winner.id)
+	);
+
 	return (
 		<>
 			<HeaderLinks />
 			<section className={styles.winners}>
-				<h2>Winners: {winners.length}</h2>
+				<h2>Winners: {filteredWinners.length}</h2>
 				<h2>Page 1/1</h2>
 				<table>
 					<thead>
@@ -45,7 +49,7 @@ const Winners: React.FC = () => {
 						</tr>
 					</thead>
 					<tbody>
-						{winners.map((winner, index) => {
+						{filteredWinners.map((winner, index) => {
 							const matchedCar = cars.find((car) => car.id === winner.id);
 							return (
 								<tr key={winner.id}>
@@ -59,7 +63,7 @@ const Winners: React.FC = () => {
 									</td>
 									<td>{matchedCar ? matchedCar.name : <span>Unknown</span>}</td>
 									<td>{winner.wins}</td>
-									<td>{winner.time}s</td>
+									<td>{(winner.time / 1000).toFixed(2)}s</td>
 								</tr>
 							);
 						})}

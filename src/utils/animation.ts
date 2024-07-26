@@ -79,8 +79,8 @@ export const controlRaceEnd = (
 		...prev,
 		[carName]: false,
 	}));
+
 	if (!firstCarFinished) {
 		setFirstCarFinished(carName);
-		console.log(`First car to finish: ${carName}`);
 	}
 };
