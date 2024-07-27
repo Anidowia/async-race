@@ -20,17 +20,10 @@ const winnersSlice = createSlice({
 			}))
 			.addCase(
 				fetchWinners.fulfilled,
-				(state, action: PayloadAction<Winner[]>) => ({
-					...state,
-					status: "succeeded",
-					winners: action.payload.map((winner) => ({
-						...winner,
-						time: Math.min(
-							winner.time,
-							state.winners.find((w) => w.id === winner.id)?.time || Infinity
-						),
-					})),
-				})
+				(state, action: PayloadAction<Winner[]>) => {
+					state.status = "succeeded";
+					state.winners = action.payload;
+				}
 			)
 			.addCase(fetchWinners.rejected, (state, action) => ({
 				...state,

@@ -40,6 +40,20 @@ const getCurrentWins = async (carId: number): Promise<number | null> => {
 	}
 };
 
+const getCurrentWinnerTime = async (carId: number): Promise<number | null> => {
+	try {
+		const response = await fetch(`${Url}/winners/${carId}`);
+		if (!response.ok) {
+			throw new Error("Failed to fetch current winner time");
+		}
+		const data = await response.json();
+		return data.time ?? null;
+	} catch (error) {
+		console.error("Error fetching current winner time:", error);
+		return null;
+	}
+};
+
 export const addWinner = async (
 	carName: string,
 	winnerTime: number,
@@ -54,7 +68,12 @@ export const addWinner = async (
 
 	try {
 		const currentWins = await getCurrentWins(carId);
+		const currentWinnerTime = await getCurrentWinnerTime(carId);
 		const wins = currentWins !== null ? currentWins : 0;
+
+		if (currentWinnerTime !== null && winnerTime >= currentWinnerTime) {
+			return;
+		}
 
 		const url = `${Url}/winners`;
 		if (wins > 0) {

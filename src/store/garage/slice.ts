@@ -10,29 +10,18 @@ const initialState: GarageState = {
 	selectedCar: null,
 	velocity: null,
 	distance: null,
-	firstCarFinished: null,
 };
 
 const garageSlice = createSlice({
 	name: "garage",
 	initialState,
 	reducers: {
-		setSelectedCar: (state, action: PayloadAction<Car>) => ({
-			...state,
-			selectedCar: action.payload,
-		}),
-		clearSelectedCar: (state) => ({
-			...state,
-			selectedCar: null,
-		}),
-		setFirstCarFinished: (state, action: PayloadAction<string | null>) => ({
-			...state,
-			firstCarFinished: action.payload,
-		}),
-		clearFirstCarFinished: (state) => ({
-			...state,
-			firstCarFinished: null,
-		}),
+		setSelectedCar: (state, action: PayloadAction<Car>) => {
+			state.selectedCar = action.payload;
+		},
+		clearSelectedCar: (state) => {
+			state.selectedCar = null;
+		},
 	},
 	extraReducers: (builder) => {
 		builder
@@ -40,11 +29,10 @@ const garageSlice = createSlice({
 				...state,
 				status: "loading",
 			}))
-			.addCase(fetchCars.fulfilled, (state, action: PayloadAction<Car[]>) => ({
-				...state,
-				status: "succeeded",
-				cars: action.payload,
-			}))
+			.addCase(fetchCars.fulfilled, (state, action: PayloadAction<Car[]>) => {
+				state.status = "succeeded";
+				state.cars = action.payload;
+			})
 			.addCase(fetchCars.rejected, (state, action) => ({
 				...state,
 				status: "failed",
@@ -83,10 +71,5 @@ const garageSlice = createSlice({
 	},
 });
 
-export const {
-	setSelectedCar,
-	clearSelectedCar,
-	setFirstCarFinished,
-	clearFirstCarFinished,
-} = garageSlice.actions;
+export const { setSelectedCar, clearSelectedCar } = garageSlice.actions;
 export default garageSlice.reducer;

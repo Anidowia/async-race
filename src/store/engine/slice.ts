@@ -29,7 +29,7 @@ const engineSlice = createSlice({
 		setWinnerName(state, action: PayloadAction<string>) {
 			state.winnerName = action.payload;
 		},
-		clearWinnerTime(state) {
+		clearWinnerData(state) {
 			state.winnerTime = null;
 			state.winnerName = null;
 		},
@@ -60,9 +60,7 @@ const engineSlice = createSlice({
 			.addCase(driveEngine.fulfilled, (state, action) => {
 				state.status = "succeeded";
 				state.data = action.payload.data;
-				if (state.winnerTime === null) {
-					state.winnerTime = action.payload.duration;
-				}
+				state.winnerTime = action.payload.duration;
 			})
 			.addCase(driveEngine.rejected, (state, action) => ({
 				...state,
@@ -72,6 +70,6 @@ const engineSlice = createSlice({
 	},
 });
 
-export const { clearWinnerTime, setWinnerName } = engineSlice.actions;
+export const { clearWinnerData, setWinnerName } = engineSlice.actions;
 
 export default engineSlice.reducer;

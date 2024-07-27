@@ -10,17 +10,14 @@ import { AppDispatch, RootState } from "../../store/hooks/hooks";
 import { addCarToGarage } from "../../store/garage/thunk";
 import { generateCar } from "../../helpers/generateCar";
 import { startRace, stopRace } from "../../utils/animation";
-import { clearFirstCarFinished } from "../../store/garage/slice";
 import { setCurrentPage } from "../../store/pages/slice";
+import { clearWinnerData } from "../../store/engine/slice";
 
 import styles from "./Wrapper.module.scss";
 
 const Wrapper: React.FC = () => {
 	const dispatch: AppDispatch = useDispatch();
 	const cars = useSelector((state: RootState) => state.garage.cars);
-	const firstCarFinished = useSelector(
-		(state: RootState) => state.garage.firstCarFinished
-	);
 	const pausedCars = useSelector((state: RootState) => state.pausedCar);
 	const { currentPage, carsPerPage } = useSelector(
 		(state: RootState) => state.page
@@ -59,7 +56,7 @@ const Wrapper: React.FC = () => {
 			currentPage * carsPerPage
 		);
 		paginatedCars.forEach((car) => stopRaceWrapper(car.id, car.name));
-		dispatch(clearFirstCarFinished());
+		dispatch(clearWinnerData());
 	};
 
 	const handleRaceClick = () => {
@@ -68,7 +65,7 @@ const Wrapper: React.FC = () => {
 			currentPage * carsPerPage
 		);
 		paginatedCars.forEach((car) => startRaceWrapper(car.id, car.name));
-		dispatch(clearFirstCarFinished());
+		dispatch(clearWinnerData());
 	};
 
 	const handleCreateCar = (name: string, color: string) => {
@@ -94,7 +91,6 @@ const Wrapper: React.FC = () => {
 					setAnimatingCars={setAnimatingCars}
 					startRace={startRaceWrapper}
 					stopRace={stopRaceWrapper}
-					firstCarFinished={firstCarFinished}
 				/>
 				<Page
 					currentPage={currentPage}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import CarSection from "./components/CarSection";
@@ -8,7 +8,6 @@ import { fetchCars } from "../../store/garage/thunk";
 import { AppDispatch, RootState } from "../../store/hooks/hooks";
 import { AnimatingCars, CarPosition } from "../../common/interface/interface";
 import { controlRaceEnd } from "../../utils/animation";
-import { setFirstCarFinished } from "../../store/garage/slice";
 import { setPausedCar } from "../../store/car/slice";
 import { addWinner } from "../../store/winners/thunk";
 import { setCurrentPage } from "../../store/pages/slice";
@@ -22,7 +21,6 @@ interface GarageProps {
 	setAnimatingCars: React.Dispatch<React.SetStateAction<AnimatingCars>>;
 	startRace: (id: number, carName: string) => void;
 	stopRace: (id: number, carName: string) => void;
-	firstCarFinished: string | null;
 }
 
 const Garage: React.FC<GarageProps> = ({
@@ -31,10 +29,7 @@ const Garage: React.FC<GarageProps> = ({
 	setAnimatingCars,
 	startRace,
 	stopRace,
-	firstCarFinished,
 }) => {
-	const [shortestTime, setShortestTime] = useState<number | null>(null);
-
 	const dispatch: AppDispatch = useDispatch();
 	const { cars, status } = useSelector((state: RootState) => state.garage);
 	const { winnerTime, winnerName } = useSelector(
@@ -52,12 +47,9 @@ const Garage: React.FC<GarageProps> = ({
 
 	useEffect(() => {
 		if (winnerName && winnerTime !== null) {
-			if (shortestTime === null || winnerTime < shortestTime) {
-				setShortestTime(winnerTime);
-				addWinner(winnerName, winnerTime, cars, dispatch);
-			}
+			addWinner(winnerName, winnerTime, cars, dispatch);
 		}
-	}, [winnerName, winnerTime, cars, dispatch, shortestTime]);
+	}, [winnerName, winnerTime, cars]);
 
 	const handlePageAdjustment = () => {
 		const totalPages = Math.ceil(cars.length / carsPerPage);
@@ -71,14 +63,12 @@ const Garage: React.FC<GarageProps> = ({
 			carName,
 			(position) => dispatch(setPausedCar({ carName, position })),
 			setAnimatingCars,
-			firstCarFinished,
-			(newFirstCar: string | null) => {
-				if (firstCarFinished === null) {
-					dispatch(setWinnerName(newFirstCar!));
-					dispatch(setFirstCarFinished(newFirstCar));
-				}
-			}
+			winnerName
 		);
+
+		if (winnerName === null) {
+			dispatch(setWinnerName(carName));
+		}
 	};
 
 	useEffect(() => {
@@ -96,7 +86,7 @@ const Garage: React.FC<GarageProps> = ({
 				<h3>Oops! No cars in the garage :(</h3>
 			) : (
 				<>
-					{firstCarFinished != null && winnerTime !== null && <WinnerBanner />}
+					{winnerName != null && <WinnerBanner />}
 					{paginatedCars.map((car) => (
 						<CarSection
 							key={car.id}

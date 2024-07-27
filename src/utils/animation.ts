@@ -1,5 +1,6 @@
 import { AnimatingCars } from "../common/interface/interface";
 import { setPausedCar } from "../store/car/slice";
+import { setWinnerName } from "../store/engine/slice";
 import { driveEngine, toggleEngine } from "../store/engine/thunk";
 import { EngineStatus } from "../store/engine/types";
 import { AppDispatch } from "../store/hooks/hooks";
@@ -71,8 +72,7 @@ export const controlRaceEnd = (
 	setAnimatingCars: React.Dispatch<
 		React.SetStateAction<{ [key: string]: boolean }>
 	>,
-	firstCarFinished: string | null,
-	setFirstCarFinished: (carName: string | null) => void
+	winnerName: string | null
 ) => {
 	updatePausedCar(88);
 	setAnimatingCars((prev) => ({
@@ -80,7 +80,7 @@ export const controlRaceEnd = (
 		[carName]: false,
 	}));
 
-	if (!firstCarFinished) {
-		setFirstCarFinished(carName);
+	if (!winnerName) {
+		setWinnerName(carName);
 	}
 };

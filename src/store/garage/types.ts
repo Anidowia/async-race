@@ -11,5 +11,4 @@ export interface GarageState {
 	selectedCar: Car | null;
 	velocity: number | null;
 	distance: number | null;
-	firstCarFinished: string | null;
 }
