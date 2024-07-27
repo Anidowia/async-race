@@ -9,7 +9,7 @@ import { AppDispatch, RootState } from "../../store/hooks/hooks";
 import { AnimatingCars, CarPosition } from "../../common/interface/interface";
 import { controlRaceEnd } from "../../utils/animation";
 import { setPausedCar } from "../../store/car/slice";
-import { addWinner } from "../../store/winners/thunk";
+import { addWinner, fetchWinners } from "../../store/winners/thunk";
 import { setWinnerName } from "../../store/engine/slice";
 import { handlePageAdjustment } from "../../utils/pagination";
 
@@ -42,6 +42,9 @@ const Garage: React.FC<GarageProps> = ({
 	useEffect(() => {
 		if (status === "idle") {
 			dispatch(fetchCars());
+		}
+		if (status === "idle") {
+			dispatch(fetchWinners());
 		}
 	}, [status, dispatch]);
 

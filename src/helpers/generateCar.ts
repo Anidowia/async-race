@@ -11,10 +11,12 @@ export const generateCar = async (dispatch: AppDispatch) => {
 	const carNamesResponse = await dispatch(fetchCarNames()).unwrap();
 	const carModelsResponse = await dispatch(fetchCarModels()).unwrap();
 
-	const newCarName = getRandomCarName(carNamesResponse);
-	const newCarModel = getRandomCarName(carModelsResponse);
-	const newCarColor = getRandomColor();
-	const fullCarName = `${newCarName} ${newCarModel}`;
+	Array.from({ length: 100 }).forEach(() => {
+		const newCarName = getRandomCarName(carNamesResponse);
+		const newCarModel = getRandomCarName(carModelsResponse);
+		const newCarColor = getRandomColor();
+		const fullCarName = `${newCarName} ${newCarModel}`;
 
-	dispatch(addCarToGarage({ name: fullCarName, color: newCarColor }));
+		dispatch(addCarToGarage({ name: fullCarName, color: newCarColor }));
+	});
 };

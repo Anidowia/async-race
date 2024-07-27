@@ -39,49 +39,53 @@ const Winners: React.FC = () => {
 		currentPage * winnersPerPage
 	);
 
+	const filteredWinners = paginatedWinners.filter((winner) =>
+		cars.some((car) => car.id === winner.id)
+	);
+
 	const handlePageChange = (page: number) => {
 		dispatch(setCurrentPage(page));
 	};
 
 	return (
 		<>
-			<section className={styles.winners}>
-				<h2>Winners: {winners.length}</h2>
-				<h2>
-					Page {currentPage}/{Math.ceil(winners.length / winnersPerPage)}
-				</h2>
-				<table>
-					<thead>
-						<tr>
-							<th>№</th>
-							<th>Car</th>
-							<th>Name</th>
-							<th>Wins</th>
-							<th>Time</th>
-						</tr>
-					</thead>
-					<tbody>
-						{paginatedWinners.map((winner, index) => {
-							const matchedCar = cars.find((car) => car.id === winner.id);
-							return (
-								<tr key={winner.id}>
-									<td>{(currentPage - 1) * winnersPerPage + index + 1}</td>
-									<td>
-										{matchedCar ? (
+			{filteredWinners.length === 0 ? (
+				<h3>Oops! No victories among the racers :(</h3>
+			) : (
+				<section className={styles.winners}>
+					<h2>Winners: {winners.length}</h2>
+					<h2>Page #{currentPage}</h2>
+					<table>
+						<thead>
+							<tr>
+								<th>№</th>
+								<th>Car</th>
+								<th>Name</th>
+								<th>Wins</th>
+								<th>Time</th>
+							</tr>
+						</thead>
+						<tbody>
+							{filteredWinners.map((winner, index) => {
+								const matchedCar = cars.find((car) => car.id === winner.id);
+								if (!matchedCar) return null;
+
+								return (
+									<tr key={winner.id}>
+										<td>{(currentPage - 1) * winnersPerPage + index + 1}</td>
+										<td>
 											<Car color={matchedCar.color} />
-										) : (
-											<Car color="ffff" />
-										)}
-									</td>
-									<td>{matchedCar ? matchedCar.name : <span>Unknown</span>}</td>
-									<td>{winner.wins}</td>
-									<td>{(winner.time / 1000).toFixed(2)}s</td>
-								</tr>
-							);
-						})}
-					</tbody>
-				</table>
-			</section>
+										</td>
+										<td>{matchedCar.name}</td>
+										<td>{winner.wins}</td>
+										<td>{(winner.time / 1000).toFixed(2)}s</td>
+									</tr>
+								);
+							})}
+						</tbody>
+					</table>
+				</section>
+			)}
 			<Page
 				currentPage={currentPage}
 				totalPages={Math.ceil(winners.length / winnersPerPage)}

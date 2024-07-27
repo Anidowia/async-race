@@ -38,9 +38,7 @@ const Header: React.FC<HeaderProps> = ({
 	const selectedCar = useSelector(
 		(state: RootState) => state.garage.selectedCar
 	);
-	const { currentPage, carsPerPage } = useSelector(
-		(state: RootState) => state.page
-	);
+	const { currentPage } = useSelector((state: RootState) => state.page);
 
 	const initialValues = {
 		textInput: selectedCar?.name || "",
@@ -75,8 +73,6 @@ const Header: React.FC<HeaderProps> = ({
 			dispatch(clearSelectedCar());
 		}
 	};
-
-	const totalPages = Math.ceil(cars.length / carsPerPage);
 
 	return (
 		<nav className={styles.grid}>
@@ -145,9 +141,7 @@ const Header: React.FC<HeaderProps> = ({
 			<div className={styles.page}>
 				<h2>Cars: {cars.length}</h2>
 				<h2>
-					<span className={styles.pageInfo}>
-						Page {currentPage} / {totalPages}
-					</span>
+					<span className={styles.pageInfo}>Page #{currentPage}</span>
 				</h2>
 			</div>
 		</nav>
