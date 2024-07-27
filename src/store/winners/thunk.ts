@@ -70,16 +70,16 @@ export const addWinner = async (
 		const currentWins = await getCurrentWins(carId);
 		const currentWinnerTime = await getCurrentWinnerTime(carId);
 		const wins = currentWins !== null ? currentWins : 0;
-
-		if (currentWinnerTime !== null && winnerTime >= currentWinnerTime) {
-			return;
-		}
+		const timeToSave =
+			currentWinnerTime !== null && winnerTime >= currentWinnerTime
+				? currentWinnerTime
+				: winnerTime;
 
 		const url = `${Url}/winners`;
 		if (wins > 0) {
-			await putRequest(`${url}/${carId}`, { wins: wins + 1, time: winnerTime });
+			await putRequest(`${url}/${carId}`, { wins: wins + 1, time: timeToSave });
 		} else {
-			await postRequest(url, { id: carId, wins: 1, time: winnerTime });
+			await postRequest(url, { id: carId, wins: 1, time: timeToSave });
 		}
 
 		await dispatch(fetchWinners());

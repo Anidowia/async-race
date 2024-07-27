@@ -60,7 +60,9 @@ const engineSlice = createSlice({
 			.addCase(driveEngine.fulfilled, (state, action) => {
 				state.status = "succeeded";
 				state.data = action.payload.data;
-				state.winnerTime = action.payload.duration;
+				if (state.winnerTime === null) {
+					state.winnerTime = action.payload.duration;
+				}
 			})
 			.addCase(driveEngine.rejected, (state, action) => ({
 				...state,

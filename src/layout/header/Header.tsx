@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Input from "../../common/input/Input";
 import Button from "../../common/button/Button";
-import HeaderLinks from "./components/HeaderLinks";
 
 import { AppDispatch, RootState } from "../../store/hooks/hooks";
 import { clearSelectedCar } from "../../store/garage/slice";
@@ -80,82 +79,78 @@ const Header: React.FC<HeaderProps> = ({
 	const totalPages = Math.ceil(cars.length / carsPerPage);
 
 	return (
-		<>
-			<HeaderLinks />
-
-			<nav className={styles.grid}>
-				<div className={styles.buttons}>
-					<div className={styles["buttons-create"]}>
-						<Formik
-							initialValues={initialValues}
-							validationSchema={validationSchema}
-							onSubmit={handleCreateSubmit}
-						>
-							{({ handleChange, values }) => (
-								<Form className={styles.inlineForm}>
-									<Input
-										type="text"
-										value={values.textInput}
-										onChange={handleChange}
-										name="textInput"
-									/>
-									<Input
-										type="color"
-										value={values.colorInput}
-										onChange={handleChange}
-										name="colorInput"
-									/>
-									<Button type="submit">CREATE</Button>
-								</Form>
-							)}
-						</Formik>
+		<nav className={styles.grid}>
+			<div className={styles.buttons}>
+				<div className={styles["buttons-create"]}>
+					<Formik
+						initialValues={initialValues}
+						validationSchema={validationSchema}
+						onSubmit={handleCreateSubmit}
+					>
+						{({ handleChange, values }) => (
+							<Form className={styles.inlineForm}>
+								<Input
+									type="text"
+									value={values.textInput}
+									onChange={handleChange}
+									name="textInput"
+								/>
+								<Input
+									type="color"
+									value={values.colorInput}
+									onChange={handleChange}
+									name="colorInput"
+								/>
+								<Button type="submit">CREATE</Button>
+							</Form>
+						)}
+					</Formik>
+				</div>
+				<div className={styles["buttons-update"]}>
+					<Formik
+						initialValues={initialValues}
+						validationSchema={validationSchema}
+						onSubmit={handleUpdateSubmit}
+						enableReinitialize
+					>
+						{({ handleChange, values }) => (
+							<Form className={styles.inlineForm}>
+								<Input
+									type="text"
+									value={values.textInput}
+									onChange={handleChange}
+									name="textInput"
+								/>
+								<Input
+									type="color"
+									value={values.colorInput}
+									onChange={handleChange}
+									name="colorInput"
+								/>
+								<Button type="submit">UPDATE</Button>
+							</Form>
+						)}
+					</Formik>
+				</div>
+				<div className={styles["buttons-race"]}>
+					<div className={styles.race}>
+						<Button onClick={onRaceClick}>RACE</Button>
 					</div>
-					<div className={styles["buttons-update"]}>
-						<Formik
-							initialValues={initialValues}
-							validationSchema={validationSchema}
-							onSubmit={handleUpdateSubmit}
-							enableReinitialize
-						>
-							{({ handleChange, values }) => (
-								<Form className={styles.inlineForm}>
-									<Input
-										type="text"
-										value={values.textInput}
-										onChange={handleChange}
-										name="textInput"
-									/>
-									<Input
-										type="color"
-										value={values.colorInput}
-										onChange={handleChange}
-										name="colorInput"
-									/>
-									<Button type="submit">UPDATE</Button>
-								</Form>
-							)}
-						</Formik>
-					</div>
-					<div className={styles["buttons-race"]}>
-						<div className={styles.race}>
-							<Button onClick={onRaceClick}>RACE</Button>
-						</div>
-						<Button onClick={onResetClick}>RESET</Button>
-						<div className={styles.generate}>
-							<Button onClick={onGenerateCars}>GENERATE CARS</Button>
-						</div>
+					<Button onClick={onResetClick}>RESET</Button>
+					<div className={styles.generate}>
+						<Button onClick={onGenerateCars}>GENERATE CARS</Button>
 					</div>
 				</div>
-				<div className={styles.page}>
-					<h2>Cars: {cars.length}</h2>
-					<h2>
-						<span className={styles.pageInfo}>
-							Page {currentPage} / {totalPages}
-						</span>
-					</h2>
-				</div>
-			</nav>
-		</>
+			</div>
+			<div className={styles.page}>
+				<h2>Cars: {cars.length}</h2>
+				<h2>
+					<span className={styles.pageInfo}>
+						Page {currentPage} / {totalPages}
+					</span>
+				</h2>
+			</div>
+		</nav>
 	);
 };
 

@@ -4,12 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchWinners } from "../../store/winners/thunk";
 import { AppDispatch, RootState } from "../../store/hooks/hooks";
 import { fetchCars } from "../../store/garage/thunk";
+import { clearWinnerData } from "../../store/engine/slice";
+import { setCurrentPage } from "../../store/pages/slice";
 
 import Car from "../../common/cars/Car";
+import Page from "../../common/pagination/Page";
 
 import styles from "./Winners.module.scss";
-import HeaderLinks from "../../layout/header/components/HeaderLinks";
-import { clearWinnerData } from "../../store/engine/slice";
 
 const Winners: React.FC = () => {
 	const dispatch: AppDispatch = useDispatch();
@@ -18,6 +19,9 @@ const Winners: React.FC = () => {
 	);
 	const { cars, status: carsStatus } = useSelector(
 		(state: RootState) => state.garage
+	);
+	const { currentPage, winnersPerPage } = useSelector(
+		(state: RootState) => state.page
 	);
 
 	useEffect(() => {
@@ -30,12 +34,22 @@ const Winners: React.FC = () => {
 		dispatch(clearWinnerData());
 	}, [winnersStatus, carsStatus, dispatch]);
 
+	const paginatedWinners = winners.slice(
+		(currentPage - 1) * winnersPerPage,
+		currentPage * winnersPerPage
+	);
+
+	const handlePageChange = (page: number) => {
+		dispatch(setCurrentPage(page));
+	};
+
 	return (
 		<>
-			<HeaderLinks />
 			<section className={styles.winners}>
 				<h2>Winners: {winners.length}</h2>
-				<h2>Page 1/1</h2>
+				<h2>
+					Page {currentPage}/{Math.ceil(winners.length / winnersPerPage)}
+				</h2>
 				<table>
 					<thead>
 						<tr>
@@ -47,11 +61,11 @@ const Winners: React.FC = () => {
 						</tr>
 					</thead>
 					<tbody>
-						{winners.map((winner, index) => {
+						{paginatedWinners.map((winner, index) => {
 							const matchedCar = cars.find((car) => car.id === winner.id);
 							return (
 								<tr key={winner.id}>
-									<td>{index + 1}</td>
+									<td>{(currentPage - 1) * winnersPerPage + index + 1}</td>
 									<td>
 										{matchedCar ? (
 											<Car color={matchedCar.color} />
@@ -68,6 +82,11 @@ const Winners: React.FC = () => {
 					</tbody>
 				</table>
 			</section>
+			<Page
+				currentPage={currentPage}
+				totalPages={Math.ceil(winners.length / winnersPerPage)}
+				onPageChange={handlePageChange}
+			/>
 		</>
 	);
 };

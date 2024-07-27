@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Garage from "../../pages/garage/Garage";
 import Header from "../header/Header";
-import Page from "../../common/page/Page";
+import Page from "../../common/pagination/Page";
 
 import { AnimatingCars } from "../../common/interface/interface";
 import { AppDispatch, RootState } from "../../store/hooks/hooks";

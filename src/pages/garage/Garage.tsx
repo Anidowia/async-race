@@ -10,8 +10,8 @@ import { AnimatingCars, CarPosition } from "../../common/interface/interface";
 import { controlRaceEnd } from "../../utils/animation";
 import { setPausedCar } from "../../store/car/slice";
 import { addWinner } from "../../store/winners/thunk";
-import { setCurrentPage } from "../../store/pages/slice";
 import { setWinnerName } from "../../store/engine/slice";
+import { handlePageAdjustment } from "../../utils/pagination";
 
 import styles from "./Garage.module.scss";
 
@@ -51,12 +51,9 @@ const Garage: React.FC<GarageProps> = ({
 		}
 	}, [winnerName, winnerTime, cars]);
 
-	const handlePageAdjustment = () => {
-		const totalPages = Math.ceil(cars.length / carsPerPage);
-		if (currentPage > totalPages && totalPages > 0) {
-			dispatch(setCurrentPage(totalPages));
-		}
-	};
+	useEffect(() => {
+		handlePageAdjustment(cars.length, currentPage, carsPerPage, dispatch);
+	}, [cars.length, currentPage, carsPerPage, dispatch]);
 
 	const AnimationEnd = (carName: string) => {
 		controlRaceEnd(
@@ -70,10 +67,6 @@ const Garage: React.FC<GarageProps> = ({
 			dispatch(setWinnerName(carName));
 		}
 	};
-
-	useEffect(() => {
-		handlePageAdjustment();
-	}, [cars.length, currentPage, carsPerPage, dispatch]);
 
 	const paginatedCars = cars.slice(
 		(currentPage - 1) * carsPerPage,
