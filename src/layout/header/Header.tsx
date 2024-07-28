@@ -19,13 +19,6 @@ interface HeaderProps {
 	onGenerateCars: () => void;
 }
 
-interface HeaderProps {
-	onRaceClick: () => void;
-	onResetClick: () => void;
-	onCreateCar: (name: string, color: string) => void;
-	onGenerateCars: () => void;
-}
-
 const Header: React.FC<HeaderProps> = ({
 	onRaceClick,
 	onResetClick,
@@ -38,9 +31,14 @@ const Header: React.FC<HeaderProps> = ({
 	const selectedCar = useSelector(
 		(state: RootState) => state.garage.selectedCar
 	);
-	const { currentPage } = useSelector((state: RootState) => state.page);
+	const { garageCurrentPage } = useSelector((state: RootState) => state.page);
 
-	const initialValues = {
+	const initialValuesCreate = {
+		textInput: "",
+		colorInput: "#833ab4",
+	};
+
+	const initialValuesUpdate = {
 		textInput: selectedCar?.name || "",
 		colorInput: selectedCar?.color || "#833ab4",
 	};
@@ -51,16 +49,16 @@ const Header: React.FC<HeaderProps> = ({
 	});
 
 	const handleCreateSubmit = (
-		values: typeof initialValues,
-		{ resetForm }: FormikHelpers<typeof initialValues>
+		values: typeof initialValuesCreate,
+		{ resetForm }: FormikHelpers<typeof initialValuesCreate>
 	) => {
 		onCreateCar(values.textInput, values.colorInput);
 		resetForm();
 	};
 
 	const handleUpdateSubmit = (
-		values: typeof initialValues,
-		{ resetForm }: FormikHelpers<typeof initialValues>
+		values: typeof initialValuesUpdate,
+		{ resetForm }: FormikHelpers<typeof initialValuesUpdate>
 	) => {
 		if (selectedCar) {
 			const updatedCar: { id: number; name: string; color: string } = {
@@ -79,7 +77,7 @@ const Header: React.FC<HeaderProps> = ({
 			<div className={styles.buttons}>
 				<div className={styles["buttons-create"]}>
 					<Formik
-						initialValues={initialValues}
+						initialValues={initialValuesCreate}
 						validationSchema={validationSchema}
 						onSubmit={handleCreateSubmit}
 					>
@@ -90,12 +88,14 @@ const Header: React.FC<HeaderProps> = ({
 									value={values.textInput}
 									onChange={handleChange}
 									name="textInput"
+									id="carInput"
 								/>
 								<Input
 									type="color"
 									value={values.colorInput}
 									onChange={handleChange}
 									name="colorInput"
+									id="colorInput"
 								/>
 								<Button type="submit">CREATE</Button>
 							</Form>
@@ -104,7 +104,7 @@ const Header: React.FC<HeaderProps> = ({
 				</div>
 				<div className={styles["buttons-update"]}>
 					<Formik
-						initialValues={initialValues}
+						initialValues={initialValuesUpdate}
 						validationSchema={validationSchema}
 						onSubmit={handleUpdateSubmit}
 						enableReinitialize
@@ -116,12 +116,14 @@ const Header: React.FC<HeaderProps> = ({
 									value={values.textInput}
 									onChange={handleChange}
 									name="textInput"
+									id="updateCar"
 								/>
 								<Input
 									type="color"
 									value={values.colorInput}
 									onChange={handleChange}
 									name="colorInput"
+									id="updateColor"
 								/>
 								<Button type="submit">UPDATE</Button>
 							</Form>
@@ -141,7 +143,7 @@ const Header: React.FC<HeaderProps> = ({
 			<div className={styles.page}>
 				<h2>Cars: {cars.length}</h2>
 				<h2>
-					<span className={styles.pageInfo}>Page #{currentPage}</span>
+					<span className={styles.pageInfo}>Page #{garageCurrentPage}</span>
 				</h2>
 			</div>
 		</nav>

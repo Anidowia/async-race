@@ -1,15 +1,23 @@
 import { AppDispatch } from "../store/hooks/hooks";
-import { setCurrentPage } from "../store/pages/slice";
+import {
+	setGarageCurrentPage,
+	setWinnersCurrentPage,
+} from "../store/pages/slice";
 
 export const handlePageAdjustment = (
 	carsLength: number,
 	currentPage: number,
 	carsPerPage: number,
-	dispatch: AppDispatch
+	dispatch: AppDispatch,
+	isGaragePage: boolean
 ) => {
 	const totalPages = Math.ceil(carsLength / carsPerPage);
 	if (currentPage > totalPages && totalPages > 0) {
-		dispatch(setCurrentPage(totalPages));
+		if (isGaragePage) {
+			dispatch(setGarageCurrentPage(totalPages));
+		} else {
+			dispatch(setWinnersCurrentPage(totalPages));
+		}
 	}
 };
 

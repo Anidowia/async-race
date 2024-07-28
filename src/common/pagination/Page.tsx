@@ -6,11 +6,17 @@ import { createPaginationHandlers } from "../../utils/pagination";
 
 import styles from "./Page.module.scss";
 
-const Page: React.FC<{
+interface PageProps {
 	currentPage: number;
 	totalPages: number;
 	onPageChange: (page: number) => void;
-}> = ({ currentPage, totalPages, onPageChange }) => {
+}
+
+const Page: React.FC<PageProps> = ({
+	currentPage,
+	totalPages,
+	onPageChange,
+}) => {
 	const { handlePrevious, handleNext } = createPaginationHandlers(
 		currentPage,
 		totalPages,

@@ -35,7 +35,7 @@ const Garage: React.FC<GarageProps> = ({
 	const { winnerTime, winnerName } = useSelector(
 		(state: RootState) => state.engine
 	);
-	const { currentPage, carsPerPage } = useSelector(
+	const { garageCurrentPage, carsPerPage } = useSelector(
 		(state: RootState) => state.page
 	);
 
@@ -55,8 +55,14 @@ const Garage: React.FC<GarageProps> = ({
 	}, [winnerName, winnerTime, cars]);
 
 	useEffect(() => {
-		handlePageAdjustment(cars.length, currentPage, carsPerPage, dispatch);
-	}, [cars.length, currentPage, carsPerPage, dispatch]);
+		handlePageAdjustment(
+			cars.length,
+			garageCurrentPage,
+			carsPerPage,
+			dispatch,
+			true
+		);
+	}, [cars.length, garageCurrentPage, carsPerPage, dispatch]);
 
 	const AnimationEnd = (carName: string) => {
 		controlRaceEnd(
@@ -72,8 +78,8 @@ const Garage: React.FC<GarageProps> = ({
 	};
 
 	const paginatedCars = cars.slice(
-		(currentPage - 1) * carsPerPage,
-		currentPage * carsPerPage
+		(garageCurrentPage - 1) * carsPerPage,
+		garageCurrentPage * carsPerPage
 	);
 
 	return (

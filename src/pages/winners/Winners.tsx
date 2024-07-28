@@ -5,7 +5,7 @@ import { fetchWinners } from "../../store/winners/thunk";
 import { AppDispatch, RootState } from "../../store/hooks/hooks";
 import { fetchCars } from "../../store/garage/thunk";
 import { clearWinnerData } from "../../store/engine/slice";
-import { setCurrentPage } from "../../store/pages/slice";
+import { setWinnersCurrentPage } from "../../store/pages/slice";
 
 import Car from "../../common/cars/Car";
 import Page from "../../common/pagination/Page";
@@ -20,7 +20,7 @@ const Winners: React.FC = () => {
 	const { cars, status: carsStatus } = useSelector(
 		(state: RootState) => state.garage
 	);
-	const { currentPage, winnersPerPage } = useSelector(
+	const { winnersCurrentPage, winnersPerPage } = useSelector(
 		(state: RootState) => state.page
 	);
 
@@ -35,8 +35,8 @@ const Winners: React.FC = () => {
 	}, [winnersStatus, carsStatus, dispatch]);
 
 	const paginatedWinners = winners.slice(
-		(currentPage - 1) * winnersPerPage,
-		currentPage * winnersPerPage
+		(winnersCurrentPage - 1) * winnersPerPage,
+		winnersCurrentPage * winnersPerPage
 	);
 
 	const filteredWinners = paginatedWinners.filter((winner) =>
@@ -44,7 +44,7 @@ const Winners: React.FC = () => {
 	);
 
 	const handlePageChange = (page: number) => {
-		dispatch(setCurrentPage(page));
+		dispatch(setWinnersCurrentPage(page));
 	};
 
 	return (
@@ -54,7 +54,7 @@ const Winners: React.FC = () => {
 			) : (
 				<section className={styles.winners}>
 					<h2>Winners: {winners.length}</h2>
-					<h2>Page #{currentPage}</h2>
+					<h2>Page #{winnersCurrentPage}</h2>
 					<table>
 						<thead>
 							<tr>
@@ -72,7 +72,9 @@ const Winners: React.FC = () => {
 
 								return (
 									<tr key={winner.id}>
-										<td>{(currentPage - 1) * winnersPerPage + index + 1}</td>
+										<td>
+											{(winnersCurrentPage - 1) * winnersPerPage + index + 1}
+										</td>
 										<td>
 											<Car color={matchedCar.color} />
 										</td>
@@ -87,7 +89,7 @@ const Winners: React.FC = () => {
 				</section>
 			)}
 			<Page
-				currentPage={currentPage}
+				currentPage={winnersCurrentPage}
 				totalPages={Math.ceil(winners.length / winnersPerPage)}
 				onPageChange={handlePageChange}
 			/>

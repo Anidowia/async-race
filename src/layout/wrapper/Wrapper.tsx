@@ -10,8 +10,8 @@ import { AppDispatch, RootState } from "../../store/hooks/hooks";
 import { addCarToGarage } from "../../store/garage/thunk";
 import { generateCar } from "../../helpers/generateCar";
 import { startRace, stopRace } from "../../utils/animation";
-import { setCurrentPage } from "../../store/pages/slice";
 import { clearWinnerData } from "../../store/engine/slice";
+import { setGarageCurrentPage } from "../../store/pages/slice";
 
 import styles from "./Wrapper.module.scss";
 
@@ -19,27 +19,24 @@ const Wrapper: React.FC = () => {
 	const dispatch: AppDispatch = useDispatch();
 	const cars = useSelector((state: RootState) => state.garage.cars);
 	const pausedCars = useSelector((state: RootState) => state.pausedCar);
-	const { currentPage, carsPerPage } = useSelector(
+	const { garageCurrentPage, carsPerPage } = useSelector(
 		(state: RootState) => state.page
 	);
 
 	const [animatingCars, setAnimatingCars] = useState<AnimatingCars>({});
 
+	const paginatedCars = cars.slice(
+		(garageCurrentPage - 1) * carsPerPage,
+		garageCurrentPage * carsPerPage
+	);
+
 	const startCar = (id: number, carName: string) => {
-		const paginatedCars = cars.slice(
-			(currentPage - 1) * carsPerPage,
-			currentPage * carsPerPage
-		);
 		if (paginatedCars.some((car) => car.id === id)) {
 			startRace(dispatch, paginatedCars, setAnimatingCars)(id, carName);
 		}
 	};
 
 	const stopCar = (id: number, carName: string) => {
-		const paginatedCars = cars.slice(
-			(currentPage - 1) * carsPerPage,
-			currentPage * carsPerPage
-		);
 		if (paginatedCars.some((car) => car.id === id)) {
 			stopRace(dispatch, setAnimatingCars)(id, carName);
 		}
@@ -51,19 +48,11 @@ const Wrapper: React.FC = () => {
 	const stopRaceWrapper = (id: number, carName: string) => stopCar(id, carName);
 
 	const stopAllCars = () => {
-		const paginatedCars = cars.slice(
-			(currentPage - 1) * carsPerPage,
-			currentPage * carsPerPage
-		);
 		paginatedCars.forEach((car) => stopRaceWrapper(car.id, car.name));
 		dispatch(clearWinnerData());
 	};
 
 	const handleRaceClick = () => {
-		const paginatedCars = cars.slice(
-			(currentPage - 1) * carsPerPage,
-			currentPage * carsPerPage
-		);
 		paginatedCars.forEach((car) => startRaceWrapper(car.id, car.name));
 		dispatch(clearWinnerData());
 	};
@@ -93,9 +82,9 @@ const Wrapper: React.FC = () => {
 					stopRace={stopRaceWrapper}
 				/>
 				<Page
-					currentPage={currentPage}
+					currentPage={garageCurrentPage}
 					totalPages={Math.ceil(cars.length / carsPerPage)}
-					onPageChange={(page) => dispatch(setCurrentPage(page))}
+					onPageChange={(page) => dispatch(setGarageCurrentPage(page))}
 				/>
 			</main>
 		</div>
