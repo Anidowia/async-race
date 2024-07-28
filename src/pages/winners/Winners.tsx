@@ -6,6 +6,7 @@ import { AppDispatch, RootState } from "../../store/hooks/hooks";
 import { fetchCars } from "../../store/garage/thunk";
 import { clearWinnerData } from "../../store/engine/slice";
 import { setWinnersCurrentPage } from "../../store/pages/slice";
+import { sortItems } from "../../utils/sortWinners";
 
 import Car from "../../common/cars/Car";
 import Page from "../../common/pagination/Page";
@@ -55,22 +56,7 @@ const Winners: React.FC = () => {
 		cars.some((car) => car.id === winner.id)
 	);
 
-	const sortedWinners = [...filteredWinners].sort((a, b) => {
-		if (!sortConfig) return 0;
-
-		const { key, direction } = sortConfig;
-
-		const aValue = a[key as keyof typeof a];
-		const bValue = b[key as keyof typeof b];
-
-		if (aValue < bValue) {
-			return direction === "asc" ? -1 : 1;
-		}
-		if (aValue > bValue) {
-			return direction === "asc" ? 1 : -1;
-		}
-		return 0;
-	});
+	const sortedWinners = sortItems(filteredWinners, sortConfig);
 
 	const handleSort = (key: string) => {
 		const direction = sortDirection[key] === "asc" ? "desc" : "asc";

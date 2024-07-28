@@ -94,4 +94,14 @@
 			transform: translateX(88vw);
 		}
 	}
+	@media (max-width: 500px) {
+		@keyframes moveCar {
+			0% {
+				transform: translateX(0);
+			}
+			100% {
+				transform: translateX(62vw);
+			}
+		}
+	}
 }

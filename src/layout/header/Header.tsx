@@ -81,23 +81,28 @@ const Header: React.FC<HeaderProps> = ({
 						validationSchema={validationSchema}
 						onSubmit={handleCreateSubmit}
 					>
-						{({ handleChange, values }) => (
-							<Form className={styles.inlineForm}>
-								<Input
-									type="text"
-									value={values.textInput}
-									onChange={handleChange}
-									name="textInput"
-									id="carInput"
-								/>
-								<Input
-									type="color"
-									value={values.colorInput}
-									onChange={handleChange}
-									name="colorInput"
-									id="colorInput"
-								/>
-								<Button type="submit">CREATE</Button>
+						{({ handleChange, values, errors, touched }) => (
+							<Form>
+								<div className={styles.inlineForm}>
+									<Input
+										type="text"
+										value={values.textInput}
+										onChange={handleChange}
+										name="textInput"
+										id="carInput"
+									/>
+									<Input
+										type="color"
+										value={values.colorInput}
+										onChange={handleChange}
+										name="colorInput"
+										id="colorInput"
+									/>
+									<Button type="submit">CREATE</Button>
+								</div>
+								{errors.textInput && touched.textInput && (
+									<p>{errors.textInput}</p>
+								)}
 							</Form>
 						)}
 					</Formik>

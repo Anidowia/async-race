@@ -74,7 +74,9 @@ export const controlRaceEnd = (
 	>,
 	winnerName: string | null
 ) => {
-	updatePausedCar(88);
+	const mediaQuery = window.matchMedia("(max-width: 500px)");
+	const position = mediaQuery.matches ? 62 : 88;
+	updatePausedCar(position);
 	setAnimatingCars((prev) => ({
 		...prev,
 		[carName]: false,

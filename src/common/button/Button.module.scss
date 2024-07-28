@@ -12,3 +12,9 @@ button {
 		border: 1px solid #0077e5;
 	}
 }
+
+@media (max-width: 500px) {
+	button {
+		padding: 7px 17px;
+	}
+}

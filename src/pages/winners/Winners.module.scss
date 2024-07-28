@@ -47,5 +47,11 @@ h3 {
 				rgb(69, 170, 252) 100%
 			);
 		}
+		@media (max-width: 500px) {
+			th,
+			td {
+				padding: 0px;
+			}
+		}
 	}
 }

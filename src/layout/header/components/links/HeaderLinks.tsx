@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-import Divider from "../../wrapper/components/Divider";
+import Divider from "../../../wrapper/components/Divider";
 
 import styles from "./HeaderLinks.module.scss";
 

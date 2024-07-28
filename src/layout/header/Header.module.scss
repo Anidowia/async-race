@@ -65,6 +65,10 @@ hr {
 			}
 		}
 	}
+	p {
+		color: white;
+		margin: 15px 50px 0;
+	}
 }
 
 .grid {
@@ -76,6 +80,12 @@ hr {
 
 		h2 {
 			margin: 20px 10px 5px;
+		}
+	}
+	@media (max-width: 500px) {
+		h2 {
+			margin: 26px 10px;
+			font-size: 20px;
 		}
 	}
 }
