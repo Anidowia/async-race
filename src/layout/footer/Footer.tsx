@@ -9,6 +9,7 @@ const Footer: React.FC = () => (
 	<footer>
 		<div className={styles.footer}>
 			<div className={styles.content}>
+				<h2>2024</h2>
 				<GithubLogo />
 				<h2>Made with 💜 By</h2>
 			</div>

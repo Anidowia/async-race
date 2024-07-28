@@ -26,6 +26,11 @@ h3 {
 
 		th {
 			color: white;
+
+			button {
+				border: none;
+				background-color: transparent;
+			}
 		}
 
 		td::before {

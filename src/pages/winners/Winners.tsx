@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { fetchWinners } from "../../store/winners/thunk";
@@ -9,6 +9,7 @@ import { setWinnersCurrentPage } from "../../store/pages/slice";
 
 import Car from "../../common/cars/Car";
 import Page from "../../common/pagination/Page";
+import Button from "../../common/button/Button";
 
 import styles from "./Winners.module.scss";
 
@@ -22,6 +23,17 @@ const Winners: React.FC = () => {
 	);
 	const { winnersCurrentPage, winnersPerPage } = useSelector(
 		(state: RootState) => state.page
+	);
+
+	const [sortConfig, setSortConfig] = useState<{
+		key: string;
+		direction: string;
+	} | null>(null);
+	const [sortDirection, setSortDirection] = useState<{ [key: string]: string }>(
+		{
+			wins: "asc",
+			time: "asc",
+		}
 	);
 
 	useEffect(() => {
@@ -43,6 +55,29 @@ const Winners: React.FC = () => {
 		cars.some((car) => car.id === winner.id)
 	);
 
+	const sortedWinners = [...filteredWinners].sort((a, b) => {
+		if (!sortConfig) return 0;
+
+		const { key, direction } = sortConfig;
+
+		const aValue = a[key as keyof typeof a];
+		const bValue = b[key as keyof typeof b];
+
+		if (aValue < bValue) {
+			return direction === "asc" ? -1 : 1;
+		}
+		if (aValue > bValue) {
+			return direction === "asc" ? 1 : -1;
+		}
+		return 0;
+	});
+
+	const handleSort = (key: string) => {
+		const direction = sortDirection[key] === "asc" ? "desc" : "asc";
+		setSortDirection({ ...sortDirection, [key]: direction });
+		setSortConfig({ key, direction });
+	};
+
 	const handlePageChange = (page: number) => {
 		dispatch(setWinnersCurrentPage(page));
 	};
@@ -55,18 +90,28 @@ const Winners: React.FC = () => {
 				<section className={styles.winners}>
 					<h2>Winners: {winners.length}</h2>
 					<h2>Page #{winnersCurrentPage}</h2>
-					<table>
+					<table className="table-sortable">
 						<thead>
 							<tr>
 								<th>№</th>
 								<th>Car</th>
 								<th>Name</th>
-								<th>Wins</th>
-								<th>Time</th>
+								<th>
+									Wins
+									<Button onClick={() => handleSort("wins")}>
+										{sortDirection.wins === "asc" ? "△" : "▽"}
+									</Button>
+								</th>
+								<th>
+									Time
+									<Button onClick={() => handleSort("time")}>
+										{sortDirection.time === "asc" ? "△" : "▽"}
+									</Button>
+								</th>
 							</tr>
 						</thead>
 						<tbody>
-							{filteredWinners.map((winner, index) => {
+							{sortedWinners.map((winner, index) => {
 								const matchedCar = cars.find((car) => car.id === winner.id);
 								if (!matchedCar) return null;
 
