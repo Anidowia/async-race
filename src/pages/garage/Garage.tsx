@@ -10,8 +10,8 @@ import { AnimatingCars, CarPosition } from "../../common/interface/interface";
 import { controlRaceEnd } from "../../utils/animation";
 import { setPausedCar } from "../../store/car/slice";
 import { addWinner, fetchWinners } from "../../store/winners/thunk";
-import { setWinnerName } from "../../store/engine/slice";
-import { handlePageAdjustment } from "../../utils/pagination";
+import { resetActiveCars, setWinnerName } from "../../store/engine/slice";
+import { getPaginatedCars, handlePageAdjustment } from "../../utils/pagination";
 
 import styles from "./Garage.module.scss";
 
@@ -38,6 +38,7 @@ const Garage: React.FC<GarageProps> = ({
 	const { garageCurrentPage, carsPerPage } = useSelector(
 		(state: RootState) => state.page
 	);
+	const paginatedCars = getPaginatedCars(cars, garageCurrentPage, carsPerPage);
 
 	useEffect(() => {
 		if (status === "idle") {
@@ -48,11 +49,23 @@ const Garage: React.FC<GarageProps> = ({
 		}
 	}, [status, dispatch]);
 
+	const activeCars = useSelector((state: RootState) => state.engine.activeCars);
+
 	useEffect(() => {
-		if (winnerName && winnerTime !== null) {
+		const allCarsStopped = Object.values(animatingCars).every(
+			(animating) => !animating
+		);
+		if (allCarsStopped) {
+			dispatch(resetActiveCars());
+		}
+	}, [animatingCars, dispatch]);
+
+	useEffect(() => {
+		console.log(activeCars);
+		if (winnerName && winnerTime !== null && activeCars > 1) {
 			addWinner(winnerName, winnerTime, cars, dispatch);
 		}
-	}, [winnerName, winnerTime, cars]);
+	}, [winnerName, winnerTime, cars, dispatch]);
 
 	useEffect(() => {
 		handlePageAdjustment(
@@ -68,8 +81,7 @@ const Garage: React.FC<GarageProps> = ({
 		controlRaceEnd(
 			carName,
 			(position) => dispatch(setPausedCar({ carName, position })),
-			setAnimatingCars,
-			winnerName
+			setAnimatingCars
 		);
 
 		if (winnerName === null) {
@@ -77,18 +89,15 @@ const Garage: React.FC<GarageProps> = ({
 		}
 	};
 
-	const paginatedCars = cars.slice(
-		(garageCurrentPage - 1) * carsPerPage,
-		garageCurrentPage * carsPerPage
-	);
-
 	return (
 		<section className={styles.garage}>
 			{cars.length === 0 ? (
 				<h3>Oops! No cars in the garage :(</h3>
 			) : (
 				<>
-					{winnerName != null && <WinnerBanner />}
+					{winnerName != null && winnerTime != null && activeCars > 1 && (
+						<WinnerBanner />
+					)}
 					{paginatedCars.map((car) => (
 						<CarSection
 							key={car.id}

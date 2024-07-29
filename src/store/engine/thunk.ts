@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-import { EngineStatus, EngineStats } from "./types";
+import { EngineState, EngineStatus } from "./types";
 import { Url } from "../../common/api/api";
 import { patchRequest } from "../../common/api/requests";
 
@@ -8,7 +8,7 @@ export const toggleEngine = createAsyncThunk(
 	"engine/toggleEngine",
 	async ({ id, status }: { id: number; status: EngineStatus }) => {
 		const url = `${Url}/engine?id=${id}&status=${status}`;
-		const data: EngineStats = await patchRequest(url);
+		const data: EngineState = await patchRequest(url);
 		return data;
 	}
 );
@@ -21,6 +21,7 @@ export const driveEngine = createAsyncThunk(
 		const data = await patchRequest(url);
 		const endTime = performance.now();
 		const duration = endTime - startTime;
-		return { data, duration };
+		console.log(data, duration, id);
+		return { data, duration, id };
 	}
 );

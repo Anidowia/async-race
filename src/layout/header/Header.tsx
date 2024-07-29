@@ -44,8 +44,9 @@ const Header: React.FC<HeaderProps> = ({
 	};
 
 	const validationSchema = Yup.object({
-		textInput: Yup.string().required("Required"),
-		colorInput: Yup.string().required("Required"),
+		textInput: Yup.string()
+			.required("Name is required")
+			.max(30, "Car name cannot exceed 30 characters"),
 	});
 
 	const handleCreateSubmit = (
@@ -89,14 +90,12 @@ const Header: React.FC<HeaderProps> = ({
 										value={values.textInput}
 										onChange={handleChange}
 										name="textInput"
-										id="carInput"
 									/>
 									<Input
 										type="color"
 										value={values.colorInput}
 										onChange={handleChange}
 										name="colorInput"
-										id="colorInput"
 									/>
 									<Button type="submit">CREATE</Button>
 								</div>
@@ -121,14 +120,12 @@ const Header: React.FC<HeaderProps> = ({
 									value={values.textInput}
 									onChange={handleChange}
 									name="textInput"
-									id="updateCar"
 								/>
 								<Input
 									type="color"
 									value={values.colorInput}
 									onChange={handleChange}
 									name="colorInput"
-									id="updateColor"
 								/>
 								<Button type="submit">UPDATE</Button>
 							</Form>
@@ -147,9 +144,7 @@ const Header: React.FC<HeaderProps> = ({
 			</div>
 			<div className={styles.page}>
 				<h2>Cars: {cars.length}</h2>
-				<h2>
-					<span className={styles.pageInfo}>Page #{garageCurrentPage}</span>
-				</h2>
+				<h2>Page #{garageCurrentPage}</h2>
 			</div>
 		</nav>
 	);

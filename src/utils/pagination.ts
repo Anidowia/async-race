@@ -37,3 +37,13 @@ export const createPaginationHandlers = (
 		}
 	},
 });
+
+export const getPaginatedCars = (
+	cars: Array<{
+		color: string;
+		id: number;
+		name: string;
+	}>,
+	currentPage: number,
+	carsPerPage: number
+) => cars.slice((currentPage - 1) * carsPerPage, currentPage * carsPerPage);

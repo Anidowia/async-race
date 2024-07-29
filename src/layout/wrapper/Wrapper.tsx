@@ -10,8 +10,9 @@ import { AppDispatch, RootState } from "../../store/hooks/hooks";
 import { addCarToGarage } from "../../store/garage/thunk";
 import { generateCar } from "../../helpers/generateCar";
 import { startRace, stopRace } from "../../utils/animation";
-import { clearWinnerData } from "../../store/engine/slice";
+import { clearWinnerData, resetActiveCars } from "../../store/engine/slice";
 import { setGarageCurrentPage } from "../../store/pages/slice";
+import { getPaginatedCars } from "../../utils/pagination";
 
 import styles from "./Wrapper.module.scss";
 
@@ -25,10 +26,7 @@ const Wrapper: React.FC = () => {
 
 	const [animatingCars, setAnimatingCars] = useState<AnimatingCars>({});
 
-	const paginatedCars = cars.slice(
-		(garageCurrentPage - 1) * carsPerPage,
-		garageCurrentPage * carsPerPage
-	);
+	const paginatedCars = getPaginatedCars(cars, garageCurrentPage, carsPerPage);
 
 	const startCar = (id: number, carName: string) => {
 		if (paginatedCars.some((car) => car.id === id)) {
@@ -50,6 +48,7 @@ const Wrapper: React.FC = () => {
 	const stopAllCars = () => {
 		paginatedCars.forEach((car) => stopRaceWrapper(car.id, car.name));
 		dispatch(clearWinnerData());
+		dispatch(resetActiveCars());
 	};
 
 	const handleRaceClick = () => {

@@ -28,7 +28,7 @@ hr {
 
 	input[type="text"] {
 		padding: 8px;
-		width: 137px;
+		width: 130px;
 	}
 
 	&-create,
@@ -67,25 +67,27 @@ hr {
 	}
 	p {
 		color: white;
-		margin: 15px 50px 0;
+		margin: 15px 0 0;
 	}
 }
 
 .grid {
 	display: grid;
 	grid-template-columns: 1fr 2fr;
+	gap: 40px;
 
 	.page {
 		color: white;
-
-		h2 {
-			margin: 20px 10px 5px;
-		}
 	}
 	@media (max-width: 500px) {
+		gap: 20px;
+
+		.page {
+			margin: 7px 0;
+		}
+
 		h2 {
-			margin: 26px 10px;
-			font-size: 20px;
+			font-size: 22px;
 		}
 	}
 }

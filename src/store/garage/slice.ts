@@ -8,8 +8,6 @@ const initialState: GarageState = {
 	status: "idle",
 	error: null,
 	selectedCar: null,
-	velocity: null,
-	distance: null,
 };
 
 const garageSlice = createSlice({

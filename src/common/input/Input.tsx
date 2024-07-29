@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import styles from "./Input.module.scss";
 
 interface InputProps {
@@ -6,31 +7,17 @@ interface InputProps {
 	value?: string;
 	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 	name?: string;
-	id: string;
 }
 
-const Input: React.FC<InputProps> = ({
-	type,
-	value = "",
-	onChange,
-	name,
-	id,
-}) => {
-	const [inputValue, setInputValue] = useState("");
+const Input: React.FC<InputProps> = ({ type, value = "", onChange, name }) => {
+	const [inputValue, setInputValue] = useState(value);
 
 	useEffect(() => {
-		const savedValue = localStorage.getItem(id);
-		if (savedValue) {
-			setInputValue(savedValue);
-		} else {
-			setInputValue(value);
-		}
-	}, [id, value]);
+		setInputValue(value);
+	}, [value]);
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		const newValue = event.target.value;
-		setInputValue(newValue);
-		localStorage.setItem(id, newValue);
+		setInputValue(event.target.value);
 		if (onChange) {
 			onChange(event);
 		}
@@ -44,7 +31,6 @@ const Input: React.FC<InputProps> = ({
 				value={inputValue}
 				onChange={handleChange}
 				name={name}
-				id={id}
 			/>
 		</div>
 	);

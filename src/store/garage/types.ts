@@ -9,6 +9,4 @@ export interface GarageState {
 	status: "idle" | "loading" | "succeeded" | "failed";
 	error: string | null;
 	selectedCar: Car | null;
-	velocity: number | null;
-	distance: number | null;
 }

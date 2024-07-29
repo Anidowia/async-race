@@ -1,16 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { toggleEngine, driveEngine } from "./thunk";
-
-interface EngineState {
-	status: "idle" | "loading" | "succeeded" | "failed";
-	error: string | null;
-	velocity: number;
-	distance: number;
-	winnerName: string | null;
-	winnerTime: number | null;
-	data: string | null;
-}
+import { EngineState } from "./types";
 
 const initialState: EngineState = {
 	status: "idle",
@@ -20,6 +11,7 @@ const initialState: EngineState = {
 	winnerName: null,
 	winnerTime: null,
 	data: null,
+	activeCars: 0,
 };
 
 const engineSlice = createSlice({
@@ -33,6 +25,9 @@ const engineSlice = createSlice({
 			state.winnerTime = null;
 			state.winnerName = null;
 		},
+		resetActiveCars(state) {
+			state.activeCars = 0;
+		},
 	},
 	extraReducers: (builder) => {
 		builder
@@ -41,22 +36,21 @@ const engineSlice = createSlice({
 				status: "loading",
 				error: null,
 			}))
-			.addCase(toggleEngine.fulfilled, (state, action) => ({
-				...state,
-				status: "succeeded",
-				velocity: action.payload.velocity,
-				distance: action.payload.distance,
-			}))
-			.addCase(toggleEngine.rejected, (state, action) => ({
-				...state,
-				status: "failed",
-				error: action.error.message || "Failed to toggle engine",
-			}))
-			.addCase(driveEngine.pending, (state) => ({
-				...state,
-				status: "loading",
-				error: null,
-			}))
+			.addCase(toggleEngine.fulfilled, (state, action) => {
+				state.status = "succeeded";
+				state.velocity = action.payload.velocity;
+				state.distance = action.payload.distance;
+				state.activeCars += 1;
+			})
+			.addCase(toggleEngine.rejected, (state, action) => {
+				state.status = "failed";
+				state.error =
+					action.error.message || "Failed to switch to toggle engine";
+			})
+			.addCase(driveEngine.pending, (state) => {
+				state.status = "loading";
+				state.error = null;
+			})
 			.addCase(driveEngine.fulfilled, (state, action) => {
 				state.status = "succeeded";
 				state.data = action.payload.data;
@@ -64,14 +58,15 @@ const engineSlice = createSlice({
 					state.winnerTime = action.payload.duration;
 				}
 			})
-			.addCase(driveEngine.rejected, (state, action) => ({
-				...state,
-				status: "failed",
-				error: action.error.message || "Failed to switch to drive mode",
-			}));
+			.addCase(driveEngine.rejected, (state, action) => {
+				state.status = "failed";
+				state.error = action.error.message || "Failed to switch to drive mode";
+				state.activeCars -= 1;
+			});
 	},
 });
 
-export const { clearWinnerData, setWinnerName } = engineSlice.actions;
+export const { clearWinnerData, setWinnerName, resetActiveCars } =
+	engineSlice.actions;
 
 export default engineSlice.reducer;

@@ -66,7 +66,7 @@ export const deleteCar = createAsyncThunk(
 		}
 
 		dispatch(fetchCars());
-		dispatch(fetchWinners);
+		dispatch(fetchWinners());
 		return carId;
 	}
 );
