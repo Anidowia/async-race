@@ -7,17 +7,35 @@ interface InputProps {
 	value?: string;
 	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 	name?: string;
+	id?: string;
 }
 
-const Input: React.FC<InputProps> = ({ type, value = "", onChange, name }) => {
+const Input: React.FC<InputProps> = ({
+	type,
+	value = "",
+	onChange,
+	name,
+	id,
+}) => {
 	const [inputValue, setInputValue] = useState(value);
 
 	useEffect(() => {
-		setInputValue(value);
-	}, [value]);
+		if (id) {
+			const savedValue = localStorage.getItem(id);
+			if (savedValue) {
+				setInputValue(savedValue);
+			}
+		} else {
+			setInputValue(value);
+		}
+	}, [id, value]);
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setInputValue(event.target.value);
+		const newValue = event.target.value;
+		setInputValue(newValue);
+		if (id) {
+			localStorage.setItem(id, newValue);
+		}
 		if (onChange) {
 			onChange(event);
 		}
@@ -40,6 +58,7 @@ Input.defaultProps = {
 	value: "",
 	name: "",
 	onChange: () => {},
+	id: "",
 };
 
 export default Input;

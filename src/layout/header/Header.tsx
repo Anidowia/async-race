@@ -90,12 +90,14 @@ const Header: React.FC<HeaderProps> = ({
 										value={values.textInput}
 										onChange={handleChange}
 										name="textInput"
+										id="carCreate"
 									/>
 									<Input
 										type="color"
 										value={values.colorInput}
 										onChange={handleChange}
 										name="colorInput"
+										id="colorCreate"
 									/>
 									<Button type="submit">CREATE</Button>
 								</div>

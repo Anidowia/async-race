@@ -61,7 +61,6 @@ const Garage: React.FC<GarageProps> = ({
 	}, [animatingCars, dispatch]);
 
 	useEffect(() => {
-		console.log(activeCars);
 		if (winnerName && winnerTime !== null && activeCars > 1) {
 			addWinner(winnerName, winnerTime, cars, dispatch);
 		}

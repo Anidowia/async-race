@@ -25,7 +25,6 @@ const Wrapper: React.FC = () => {
 	);
 
 	const [animatingCars, setAnimatingCars] = useState<AnimatingCars>({});
-
 	const paginatedCars = getPaginatedCars(cars, garageCurrentPage, carsPerPage);
 
 	const startCar = (id: number, carName: string) => {

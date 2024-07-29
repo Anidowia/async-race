@@ -21,7 +21,6 @@ export const driveEngine = createAsyncThunk(
 		const data = await patchRequest(url);
 		const endTime = performance.now();
 		const duration = endTime - startTime;
-		console.log(data, duration, id);
 		return { data, duration, id };
 	}
 );
