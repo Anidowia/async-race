@@ -11,7 +11,7 @@ const initialState: Page = {
 	garageCurrentPage: 1,
 	winnersCurrentPage: 1,
 	carsPerPage: 7,
-	winnersPerPage: 7,
+	winnersPerPage: 10,
 };
 
 const loadPageFromLocalStorage = (key: string): number => {
