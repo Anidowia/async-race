@@ -62,7 +62,7 @@ export const deleteCar = createAsyncThunk(
 				await deleteRequest(winnerUrl);
 			}
 		} catch (error) {
-			console.error("Error checking or deleting the winner:", error);
+			console.log("Error checking or deleting the winner:", error);
 		}
 
 		dispatch(fetchCars());

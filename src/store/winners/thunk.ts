@@ -35,7 +35,6 @@ const getCurrentWins = async (carId: number): Promise<number | null> => {
 		const result = await response.json();
 		return result.wins;
 	} catch (error) {
-		console.error("Error fetching current wins:", error);
 		return null;
 	}
 };
@@ -49,7 +48,6 @@ const getCurrentWinnerTime = async (carId: number): Promise<number | null> => {
 		const data = await response.json();
 		return data.time ?? null;
 	} catch (error) {
-		console.error("Error fetching current winner time:", error);
 		return null;
 	}
 };
@@ -66,24 +64,20 @@ export const addWinner = async (
 		return;
 	}
 
-	try {
-		const currentWins = await getCurrentWins(carId);
-		const currentWinnerTime = await getCurrentWinnerTime(carId);
-		const wins = currentWins !== null ? currentWins : 0;
-		const timeToSave =
-			currentWinnerTime !== null && winnerTime >= currentWinnerTime
-				? currentWinnerTime
-				: winnerTime;
+	const currentWins = await getCurrentWins(carId);
+	const currentWinnerTime = await getCurrentWinnerTime(carId);
+	const wins = currentWins !== null ? currentWins : 0;
+	const timeToSave =
+		currentWinnerTime !== null && winnerTime >= currentWinnerTime
+			? currentWinnerTime
+			: winnerTime;
 
-		const url = `${Url}/winners`;
-		if (wins > 0) {
-			await putRequest(`${url}/${carId}`, { wins: wins + 1, time: timeToSave });
-		} else {
-			await postRequest(url, { id: carId, wins: 1, time: timeToSave });
-		}
-
-		await dispatch(fetchWinners());
-	} catch (error) {
-		console.error("Error:", error);
+	const url = `${Url}/winners`;
+	if (wins > 0) {
+		await putRequest(`${url}/${carId}`, { wins: wins + 1, time: timeToSave });
+	} else {
+		await postRequest(url, { id: carId, wins: 1, time: timeToSave });
 	}
+
+	await dispatch(fetchWinners());
 };
