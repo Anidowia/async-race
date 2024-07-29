@@ -135,9 +135,7 @@ const Header: React.FC<HeaderProps> = ({
 					</Formik>
 				</div>
 				<div className={styles["buttons-race"]}>
-					<div className={styles.race}>
-						<Button onClick={onRaceClick}>RACE</Button>
-					</div>
+					<Button onClick={onRaceClick}>RACE</Button>
 					<Button onClick={onResetClick}>RESET</Button>
 					<div className={styles.generate}>
 						<Button onClick={onGenerateCars}>GENERATE CARS</Button>

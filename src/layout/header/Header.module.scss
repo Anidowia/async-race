@@ -28,7 +28,7 @@ hr {
 
 	input[type="text"] {
 		padding: 8px;
-		width: 130px;
+		width: 124px;
 	}
 
 	&-create,
@@ -50,9 +50,7 @@ hr {
 		display: flex;
 		gap: 10px;
 		padding: 8px 5px;
-	}
 
-	.race {
 		button {
 			color: #833ab4;
 			border-color: #833ab4;
@@ -74,13 +72,13 @@ hr {
 .grid {
 	display: grid;
 	grid-template-columns: 1fr 2fr;
-	gap: 40px;
+	gap: 30px;
 
 	.page {
 		color: white;
 	}
 	@media (max-width: 500px) {
-		gap: 20px;
+		gap: 10px;
 
 		.page {
 			margin: 7px 0;
